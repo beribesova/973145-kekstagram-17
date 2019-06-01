@@ -1,7 +1,7 @@
 # Личный проект «Кекстаграм» [![Build status][travis-image]][travis-url]
 
 * Студент: [Анастасия Берибесова](https://up.htmlacademy.ru/javascript/17/user/973145).
-* Наставник: `Неизвестно`.
+* Наставник: [Alexey Komarov](https://htmlacademy.ru/profile/id178804).
 
 ---
 
