@@ -1,0 +1,94 @@
+'use strict';
+
+var COMMENTS = ['Всё отлично!', 'В целом всё неплохо. Но не всё.', 'Когда вы делаете фотографию, хорошо бы убирать палец из кадра. В конце концов это просто непрофессионально.', 'Моя бабушка случайно чихнула с фотоаппаратом в руках и у неё получилась фотография лучше.', 'Я поскользнулся на банановой кожуре и уронил фотоаппарат на кота и у меня получилась фотография лучше.', 'Лица у людей на фотке перекошены, как будто их избивают. Как можно было поймать такой неудачный момент?!'];
+var NAMES = ['Артем', 'Катя', 'Максим', 'Лиза'];
+
+function getrandomNumber(min, max) {
+  return Math.floor(min + Math.random() * (max + 1 - min));
+}
+
+function getRandomComments() {
+  var requireComment = getrandomNumber(1, 2);
+  var randComments = '';
+  var comments = COMMENTS;
+  comments.sort(function () {
+    return Math.random() - 0.5;
+  });
+
+  for (var k = 0; k < requireComment; k++) {
+    randComments += comments[k];
+  }
+  return randComments;
+}
+
+function getRandomNames() {
+  var randName = [];
+  var names = NAMES;
+  randName = names.sort(function () {
+    return Math.random() - 0.5;
+  });
+  return randName[0];
+}
+
+var getPhotoListElement = function () {
+  var photoListElement = document.querySelector('.pictures');
+  return photoListElement;
+};
+
+var generatePhoto = function (photos, i) {
+  photos[i] = {
+    url: 'photos/' + (i + 1) + '.jpg',
+    likes: getrandomNumber(15, 200),
+    comments: generateComments()
+  };
+};
+
+var generatePhotos = function () {
+  var photos = [];
+  for (var i = 0; i < 25; i++) {
+    generatePhoto(photos, i);
+  }
+  return photos;
+};
+
+var generateComment = function (messages, j) {
+  messages[j] = {
+    avatar: 'img/avatar-' + getrandomNumber(1, 6) + '.svg',
+    message: getRandomComments(),
+    name: getRandomNames()
+  };
+};
+
+var generateComments = function () {
+  var messages = [];
+  for (var j = 0; j < getrandomNumber(1, 5); j++) {
+    generateComment(messages, j);
+  }
+  return messages;
+};
+
+var renderPhoto = function (kekstagramPhotoTemplate, photo) {
+  var kekstagramElement = kekstagramPhotoTemplate.cloneNode(true);
+  kekstagramElement.querySelector('img').src = photo.url;
+  kekstagramElement.querySelector('.picture__likes').textContent = photo.likes;
+  kekstagramElement.querySelector('.picture__comments').textContent = photo.comments.length;
+
+  return kekstagramElement;
+};
+
+var createPhoto = function (fragment, kekstagramPhotoTemplate, j) {
+  fragment.appendChild(renderPhoto(kekstagramPhotoTemplate, photos[j]));
+};
+
+var photos = generatePhotos();
+var createPhotos = function (kekstagramPhotoTemplate) {
+  var fragment = document.createDocumentFragment();
+  for (var j = 0; j < photos.length; j++) {
+    createPhoto(fragment, kekstagramPhotoTemplate, j);
+  }
+  getPhotoListElement().appendChild(fragment);
+};
+
+var kekstagramPhotoTemplate = document.querySelector('#picture')
+    .content;
+createPhotos(kekstagramPhotoTemplate);
