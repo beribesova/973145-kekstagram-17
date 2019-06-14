@@ -1,22 +1,27 @@
 'use strict';
 
 var COMMENTS = ['Всё отлично!', 'В целом всё неплохо. Но не всё.', 'Когда вы делаете фотографию, хорошо бы убирать палец из кадра. В конце концов это просто непрофессионально.', 'Моя бабушка случайно чихнула с фотоаппаратом в руках и у неё получилась фотография лучше.', 'Я поскользнулся на банановой кожуре и уронил фотоаппарат на кота и у меня получилась фотография лучше.', 'Лица у людей на фотке перекошены, как будто их избивают. Как можно было поймать такой неудачный момент?!'];
-var NAMES = ['Артем', 'Катя', 'Максим', 'Лиза'];
+var NAMES = ['Артем', 'Катя', 'Максим', 'Лиза', 'Евгений', 'Сергей', 'Маша'];
+var NUMBER_OF_COMMENTS = 25;
 
 function getrandomNumber(min, max) {
   return Math.floor(min + Math.random() * (max + 1 - min));
 }
 
+var getRandomSort = function (data) {
+  return data.sort(function () {
+    return Math.random() - 0.5;
+  });
+};
+
 function getRandomComments() {
   var requireComment = getrandomNumber(1, 2);
   var randComments = '';
   var comments = COMMENTS;
-  comments.sort(function () {
-    return Math.random() - 0.5;
-  });
+  getRandomSort(comments);
 
-  for (var k = 0; k < requireComment; k++) {
-    randComments += comments[k];
+  for (var i = 0; i < requireComment; i++) {
+    randComments += comments[i];
   }
   return randComments;
 }
@@ -24,9 +29,7 @@ function getRandomComments() {
 function getRandomNames() {
   var randName = [];
   var names = NAMES;
-  randName = names.sort(function () {
-    return Math.random() - 0.5;
-  });
+  randName = getRandomSort(names);
   return randName[0];
 }
 
@@ -35,34 +38,36 @@ var getPhotoListElement = function () {
   return photoListElement;
 };
 
-var generatePhoto = function (photos, i) {
-  photos[i] = {
-    url: 'photos/' + (i + 1) + '.jpg',
+var getPhotoData = function (PhotoIdx) {
+  var PhotoData = {
+    url: 'photos/' + (PhotoIdx + 1) + '.jpg',
     likes: getrandomNumber(15, 200),
-    comments: generateComments()
+    comments: getComments()
   };
+  return PhotoData;
 };
 
-var generatePhotos = function () {
+var getPhotos = function () {
   var photos = [];
-  for (var i = 0; i < 25; i++) {
-    generatePhoto(photos, i);
+  for (var i = 0; i < NUMBER_OF_COMMENTS; i++) {
+    photos[i] = getPhotoData(i);
   }
   return photos;
 };
 
-var generateComment = function (messages, j) {
-  messages[j] = {
+var getCommentData = function () {
+  var CommentData = {
     avatar: 'img/avatar-' + getrandomNumber(1, 6) + '.svg',
     message: getRandomComments(),
     name: getRandomNames()
   };
+  return CommentData;
 };
 
-var generateComments = function () {
+var getComments = function () {
   var messages = [];
-  for (var j = 0; j < getrandomNumber(1, 5); j++) {
-    generateComment(messages, j);
+  for (var i = 0; i < getrandomNumber(1, 5); i++) {
+    messages[i] = getCommentData();
   }
   return messages;
 };
@@ -76,19 +81,20 @@ var renderPhoto = function (kekstagramPhotoTemplate, photo) {
   return kekstagramElement;
 };
 
-var createPhoto = function (fragment, kekstagramPhotoTemplate, j) {
-  fragment.appendChild(renderPhoto(kekstagramPhotoTemplate, photos[j]));
+var createPhoto = function (fragment, kekstagramPhotoTemplate, photos) {
+  fragment.appendChild(renderPhoto(kekstagramPhotoTemplate, photos));
 };
 
-var photos = generatePhotos();
-var createPhotos = function (kekstagramPhotoTemplate) {
+var createPhotos = function (kekstagramPhotoTemplate, dataPhotos) {
   var fragment = document.createDocumentFragment();
-  for (var j = 0; j < photos.length; j++) {
-    createPhoto(fragment, kekstagramPhotoTemplate, j);
+  for (var i = 0; i < dataPhotos.length; i++) {
+    createPhoto(fragment, kekstagramPhotoTemplate, dataPhotos[i]);
   }
   getPhotoListElement().appendChild(fragment);
 };
 
 var kekstagramPhotoTemplate = document.querySelector('#picture')
     .content;
-createPhotos(kekstagramPhotoTemplate);
+
+var dataPhotos = getPhotos();
+createPhotos(kekstagramPhotoTemplate, dataPhotos);
