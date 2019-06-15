@@ -12,18 +12,16 @@ var getRandomComments = function () {
   var requireCount = getRandomNumber(1, 2);
   var randomComments = '';
   var commentsIdx = [];
-  var comments = [];
+
   for (var i = 0; i < requireCount; i++) {
     commentsIdx[i] = getRandomNumber(0, COMMENTS.length);
-    for (var j = 0; j < requireCount; j++) {
-      comments[j] = COMMENTS[commentsIdx[i]];
-    }
   }
+
   for (i = 0; i < requireCount; i++) {
     if (i === requireCount - 1) {
-      randomComments += comments[i];
+      randomComments += COMMENTS[commentsIdx[i]];
     } else {
-      randomComments += comments[i] + '&nbsp;';
+      randomComments += COMMENTS[commentsIdx[i]] + '&nbsp;';
     }
   }
   return randomComments;
