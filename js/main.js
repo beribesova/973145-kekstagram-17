@@ -126,6 +126,26 @@ var calculateValue = function (sliderValue, min, max) {
   }
 };
 
+var calculateValues = function (evt) {
+  switch (evt.target.classList[1]) {
+    case 'effects__preview--chrome':
+      uploadPreview.style.filter = 'grayscale(' + calculateValue(effectValue.value, 0, 1) + ')';
+      break;
+    case 'effects__preview--sepia':
+      uploadPreview.style.filter = 'sepia(' + calculateValue(effectValue.value, 0, 1) + ')';
+      break;
+    case 'effects__preview--marvin':
+      uploadPreview.style.filter = 'invert(' + calculateValue(effectValue.value, 0, 100) + '%)';
+      break;
+    case 'effects__preview--phobos':
+      uploadPreview.style.filter = 'blur(' + calculateValue(effectValue.value, 0, 3) + 'px)';
+      break;
+    case 'effects__preview--heat':
+      uploadPreview.style.filter = 'brightness(' + calculateValue(effectValue.value, 1, 3) + ')';
+      break;
+  }
+};
+
 var changeEffect = function () {
   for (var i = 0; i <= 5; i++) {
     effectsPreview[i].addEventListener('click', function (evt) {
@@ -136,23 +156,7 @@ var changeEffect = function () {
         slider.classList.remove('hidden');
       }
 
-      switch (evt.target.classList[1]) {
-        case 'effects__preview--chrome':
-          uploadPreview.style.filter = 'grayscale(' + calculateValue(effectValue.value, 0, 1) + ')';
-          break;
-        case 'effects__preview--sepia':
-          uploadPreview.style.filter = 'sepia(' + calculateValue(effectValue.value, 0, 1) + ')';
-          break;
-        case 'effects__preview--marvin':
-          uploadPreview.style.filter = 'invert(' + calculateValue(effectValue.value, 0, 100) + '%)';
-          break;
-        case 'effects__preview--phobos':
-          uploadPreview.style.filter = 'blur(' + calculateValue(effectValue.value, 0, 3) + 'px)';
-          break;
-        case 'effects__preview--heat':
-          uploadPreview.style.filter = 'brightness(' + calculateValue(effectValue.value, 1, 3) + ')';
-          break;
-      }
+      calculateValues(evt);
     }
     );
   }
@@ -177,8 +181,8 @@ uploadClose.addEventListener('keydown', function (evt) {
   }
 });
 
-item.addEventListener('mouseup', function () {
-  // changeEffect();
+item.addEventListener('mouseup', function (evt) {
+  calculateValues(evt);
 });
 
 changeEffect();
