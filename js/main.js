@@ -3,15 +3,16 @@
 var COMMENTS = ['Всё отлично!', 'В целом всё неплохо. Но не всё.', 'Когда вы делаете фотографию, хорошо бы убирать палец из кадра. В конце концов это просто непрофессионально.', 'Моя бабушка случайно чихнула с фотоаппаратом в руках и у неё получилась фотография лучше.', 'Я поскользнулся на банановой кожуре и уронил фотоаппарат на кота и у меня получилась фотография лучше.', 'Лица у людей на фотке перекошены, как будто их избивают. Как можно было поймать такой неудачный момент?!'];
 var NAMES = ['Артем', 'Катя', 'Максим', 'Лиза', 'Евгений', 'Сергей', 'Маша'];
 var COMMENTS_NUMBER = 25;
-var uploadSelectImage = document.getElementById('upload-select-image');
-var uploadFile = uploadSelectImage.querySelector('#upload-file');
+var uploadFile = document.querySelector('#upload-file');
 var uploadOverlayImg = document.querySelector('.img-upload__overlay ');
 var uploadClose = uploadOverlayImg.querySelector('#upload-cancel');
 var slider = document.querySelector('.img-upload__effect-level');
-var item = slider.querySelector('.effect-level__pin');
-var uploadPreview = document.querySelector('.img-upload__preview');
-var effectsPreview = document.querySelectorAll('.effects__preview');
+var effectsRadio = document.querySelectorAll('.effects__radio');
+var effectLevelPin = slider.querySelector('.effect-level__pin');
+var effectLevelLine = slider.querySelector('.effect-level__line');
+var uploadPreviewImg = document.querySelector('.img-upload__preview img');
 var effectValue = slider.querySelector('.effect-level__value');
+var activeEffectRadio = document.querySelector('.effects__radio:checked');
 var ESC_KEYCODE = 27;
 var ENTER_KEYCODE = 13;
 
@@ -118,6 +119,7 @@ var closePopup = function () {
   document.removeEventListener('keydown', onPopupEscPress);
 };
 
+
 var calculateValue = function (sliderValue, min, max) {
   if (sliderValue === 0) {
     return min;
@@ -126,39 +128,66 @@ var calculateValue = function (sliderValue, min, max) {
   }
 };
 
-var calculateValues = function (evt) {
-  switch (evt.target.classList[1]) {
-    case 'effects__preview--chrome':
-      uploadPreview.style.filter = 'grayscale(' + calculateValue(effectValue.value, 0, 1) + ')';
+var applyEffect = function (effectName, sliderValue) {
+  switch (effectName) {
+    case 'none':
+      uploadPreviewImg.style.filter = '';
       break;
-    case 'effects__preview--sepia':
-      uploadPreview.style.filter = 'sepia(' + calculateValue(effectValue.value, 0, 1) + ')';
+    case 'chrome':
+      uploadPreviewImg.style.filter = 'grayscale(' + calculateValue(sliderValue, 0, 1) + ')';
       break;
-    case 'effects__preview--marvin':
-      uploadPreview.style.filter = 'invert(' + calculateValue(effectValue.value, 0, 100) + '%)';
+    case 'sepia':
+      uploadPreviewImg.style.filter = 'sepia(' + calculateValue(sliderValue, 0, 1) + ')';
       break;
-    case 'effects__preview--phobos':
-      uploadPreview.style.filter = 'blur(' + calculateValue(effectValue.value, 0, 3) + 'px)';
+    case 'marvin':
+      uploadPreviewImg.style.filter = 'invert(' + calculateValue(sliderValue, 0, 100) + '%)';
       break;
-    case 'effects__preview--heat':
-      uploadPreview.style.filter = 'brightness(' + calculateValue(effectValue.value, 1, 3) + ')';
+    case 'phobos':
+      uploadPreviewImg.style.filter = 'blur(' + calculateValue(sliderValue, 0, 3) + 'px)';
       break;
+    case 'heat':
+      uploadPreviewImg.style.filter = 'brightness(' + calculateValue(sliderValue, 1, 3) + ')';
+      break;
+  }
+
+};
+
+var classAssignment = function (evt, maxValue) {
+  uploadPreviewImg.className = '';
+  effectValue.classList.remove('hidden');
+  uploadPreviewImg.classList.add('effects__preview--' + evt.target.value);
+  applyEffect(evt.target.value, maxValue);
+
+  if (evt.target.value === 'none') {
+    effectValue.classList.add('hidden');
   }
 };
 
-var changeEffect = function () {
-  for (var i = 0; i <= 5; i++) {
-    effectsPreview[i].addEventListener('click', function (evt) {
+var resetEffect = function () {
+  effectValue.value = 100;
+  return effectValue.value;
+};
 
-      if (evt.target.classList[1] === 'effects__preview--none') {
-        slider.classList.add('hidden');
-      } else {
-        slider.classList.remove('hidden');
-      }
+var sliderHide = function (effect) {
+  if (effect) {
+    slider.classList.add('hidden');
+  } else {
+    slider.classList.remove('hidden');
+  }
+};
 
-      calculateValues(evt);
-    }
-    );
+var chooseEffectToggle = function (effectsToggle) {
+  effectsToggle.addEventListener('change', function (evt) {
+    sliderHide(evt.target.id === 'effect-none');
+    var maxValue = resetEffect();
+    classAssignment(evt, maxValue);
+  });
+};
+
+var getEffectsRadio = function () {
+  for (var i = 0; i < effectsRadio.length; i++) {
+    var effectsToggle = effectsRadio[i];
+    chooseEffectToggle(effectsToggle);
   }
 };
 
@@ -169,6 +198,7 @@ createPhotos(kekstagramPhotoTemplate, photosData);
 
 uploadFile.addEventListener('change', function () {
   openPopup();
+  uploadFile.blur();
 });
 
 uploadClose.addEventListener('click', function () {
@@ -181,8 +211,12 @@ uploadClose.addEventListener('keydown', function (evt) {
   }
 });
 
-item.addEventListener('mouseup', function (evt) {
-  calculateValues(evt);
+getEffectsRadio();
+
+effectLevelPin.addEventListener('mouseup', function (evt) {
+  evt.preventDefault();
+  effectValue.value = Math.round((evt.target.offsetLeft * 100) / effectLevelLine.offsetWidth);
+  applyEffect(activeEffectRadio.value, effectValue.value);
+
 });
 
-changeEffect();
