@@ -4,13 +4,15 @@ var COMMENTS = ['Всё отлично!', 'В целом всё неплохо. 
 var NAMES = ['Артем', 'Катя', 'Максим', 'Лиза', 'Евгений', 'Сергей', 'Маша'];
 var COMMENTS_NUMBER = 25;
 var uploadFile = document.querySelector('#upload-file');
-var uploadOverlayImg = document.querySelector('.img-upload__overlay ');
-var uploadClose = uploadOverlayImg.querySelector('#upload-cancel');
+var uploadOverlayImage = document.querySelector('.img-upload__overlay ');
+var uploadClose = uploadOverlayImage.querySelector('#upload-cancel');
 var slider = document.querySelector('.img-upload__effect-level');
-var effectsRadio = document.querySelectorAll('.effects__radio');
+var uploadEffects = document.querySelector('.img-upload__effects ');
+// var effectsRadio = document.querySelectorAll('.effects__radio');
+// var effectsList = document.querySelectorAll('.effects__list');
 var effectLevelPin = slider.querySelector('.effect-level__pin');
 var effectLevelLine = slider.querySelector('.effect-level__line');
-var uploadPreviewImg = document.querySelector('.img-upload__preview img');
+var uploadPreviewImage = document.querySelector('.img-upload__preview img');
 var effectValue = slider.querySelector('.effect-level__value');
 var activeEffectRadio = document.querySelector('.effects__radio:checked');
 var ESC_KEYCODE = 27;
@@ -103,20 +105,20 @@ var createPhotos = function (kekstagramPhotoTemplate, photosData) {
   getPhotoListElement().appendChild(fragment);
 };
 
-var onPopupEscPress = function (evt) {
+var onPopupEscapePress = function (evt) {
   if (evt.keyCode === ESC_KEYCODE) {
     closePopup();
   }
 };
 
 var openPopup = function () {
-  uploadOverlayImg.classList.remove('hidden');
-  document.addEventListener('keydown', onPopupEscPress);
+  uploadOverlayImage.classList.remove('hidden');
+  document.addEventListener('keydown', onPopupEscapePress);
 };
 
 var closePopup = function () {
-  uploadOverlayImg.classList.add('hidden');
-  document.removeEventListener('keydown', onPopupEscPress);
+  uploadOverlayImage.classList.add('hidden');
+  document.removeEventListener('keydown', onPopupEscapePress);
 };
 
 
@@ -131,31 +133,31 @@ var calculateValue = function (sliderValue, min, max) {
 var applyEffect = function (effectName, sliderValue) {
   switch (effectName) {
     case 'none':
-      uploadPreviewImg.style.filter = '';
+      uploadPreviewImage.style.filter = '';
       break;
     case 'chrome':
-      uploadPreviewImg.style.filter = 'grayscale(' + calculateValue(sliderValue, 0, 1) + ')';
+      uploadPreviewImage.style.filter = 'grayscale(' + calculateValue(sliderValue, 0, 1) + ')';
       break;
     case 'sepia':
-      uploadPreviewImg.style.filter = 'sepia(' + calculateValue(sliderValue, 0, 1) + ')';
+      uploadPreviewImage.style.filter = 'sepia(' + calculateValue(sliderValue, 0, 1) + ')';
       break;
     case 'marvin':
-      uploadPreviewImg.style.filter = 'invert(' + calculateValue(sliderValue, 0, 100) + '%)';
+      uploadPreviewImage.style.filter = 'invert(' + calculateValue(sliderValue, 0, 100) + '%)';
       break;
     case 'phobos':
-      uploadPreviewImg.style.filter = 'blur(' + calculateValue(sliderValue, 0, 3) + 'px)';
+      uploadPreviewImage.style.filter = 'blur(' + calculateValue(sliderValue, 0, 3) + 'px)';
       break;
     case 'heat':
-      uploadPreviewImg.style.filter = 'brightness(' + calculateValue(sliderValue, 1, 3) + ')';
+      uploadPreviewImage.style.filter = 'brightness(' + calculateValue(sliderValue, 1, 3) + ')';
       break;
   }
 
 };
 
-var classAssignment = function (evt, maxValue) {
-  uploadPreviewImg.className = '';
+var onEffectChange = function (evt, maxValue) {
+  uploadPreviewImage.className = '';
   effectValue.classList.remove('hidden');
-  uploadPreviewImg.classList.add('effects__preview--' + evt.target.value);
+  uploadPreviewImage.classList.add('effects__preview--' + evt.target.value);
   applyEffect(evt.target.value, maxValue);
 
   if (evt.target.value === 'none') {
@@ -168,7 +170,7 @@ var resetEffect = function () {
   return effectValue.value;
 };
 
-var sliderHide = function (effect) {
+var hideSlider = function (effect) {
   if (effect) {
     slider.classList.add('hidden');
   } else {
@@ -176,19 +178,21 @@ var sliderHide = function (effect) {
   }
 };
 
-var chooseEffectToggle = function (effectsToggle) {
+var hangChangeToggle = function (effectsToggle) {
   effectsToggle.addEventListener('change', function (evt) {
-    sliderHide(evt.target.id === 'effect-none');
+    hideSlider(evt.target.id === 'effect-none');
     var maxValue = resetEffect();
-    classAssignment(evt, maxValue);
+    onEffectChange(evt, maxValue);
   });
 };
 
-var getEffectsRadio = function () {
-  for (var i = 0; i < effectsRadio.length; i++) {
-    var effectsToggle = effectsRadio[i];
-    chooseEffectToggle(effectsToggle);
-  }
+var hangClickEffects = function () {
+  uploadEffects.addEventListener('click', function (evt) {
+    if (evt.target.localName === 'input') {
+      var effectsToggle = evt.target;
+      hangChangeToggle(effectsToggle);
+    }
+  });
 };
 
 var kekstagramPhotoTemplate = document.querySelector('#picture').content;
@@ -211,7 +215,7 @@ uploadClose.addEventListener('keydown', function (evt) {
   }
 });
 
-getEffectsRadio();
+hangClickEffects();
 
 effectLevelPin.addEventListener('mouseup', function (evt) {
   evt.preventDefault();
