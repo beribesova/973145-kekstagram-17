@@ -7,7 +7,7 @@ var uploadFile = document.querySelector('#upload-file');
 var uploadOverlayImage = document.querySelector('.img-upload__overlay ');
 var uploadClose = uploadOverlayImage.querySelector('#upload-cancel');
 var slider = document.querySelector('.img-upload__effect-level');
-var uploadEffects = document.querySelector('.img-upload__effects ');
+var uploadImageEffects = document.querySelector('.img-upload__effects ');
 // var effectsRadio = document.querySelectorAll('.effects__radio');
 // var effectsList = document.querySelectorAll('.effects__list');
 var effectLevelPin = slider.querySelector('.effect-level__pin');
@@ -154,13 +154,13 @@ var applyEffect = function (effectName, sliderValue) {
 
 };
 
-var onEffectChange = function (evt, maxValue) {
+var onEffectChange = function (effectName, value) {
   uploadPreviewImage.className = '';
   effectValue.classList.remove('hidden');
-  uploadPreviewImage.classList.add('effects__preview--' + evt.target.value);
-  applyEffect(evt.target.value, maxValue);
+  uploadPreviewImage.classList.add('effects__preview--' + effectName);
+  applyEffect(effectName, value);
 
-  if (evt.target.value === 'none') {
+  if (effectName === 'none') {
     effectValue.classList.add('hidden');
   }
 };
@@ -178,19 +178,17 @@ var hideSlider = function (effect) {
   }
 };
 
-var hangChangeToggle = function (effectsToggle) {
-  effectsToggle.addEventListener('change', function (evt) {
-    hideSlider(evt.target.id === 'effect-none');
-    var maxValue = resetEffect();
-    onEffectChange(evt, maxValue);
-  });
+var setEffect = function (effectsToggle) {
+  hideSlider(effectsToggle.id === 'effect-none');
+  var value = resetEffect();
+  onEffectChange(effectsToggle.value, value);
 };
 
-var hangClickEffects = function () {
-  uploadEffects.addEventListener('click', function (evt) {
-    if (evt.target.localName === 'input') {
-      var effectsToggle = evt.target;
-      hangChangeToggle(effectsToggle);
+var addClickEffectsListener = function () {
+  uploadImageEffects.addEventListener('click', function (evt) {
+    var effectsToggle = evt.target;
+    if (effectsToggle.localName === 'input') {
+      setEffect(effectsToggle);
     }
   });
 };
@@ -215,12 +213,11 @@ uploadClose.addEventListener('keydown', function (evt) {
   }
 });
 
-hangClickEffects();
+addClickEffectsListener();
 
 effectLevelPin.addEventListener('mouseup', function (evt) {
   evt.preventDefault();
   effectValue.value = Math.round((evt.target.offsetLeft * 100) / effectLevelLine.offsetWidth);
   applyEffect(activeEffectRadio.value, effectValue.value);
-
 });
 
