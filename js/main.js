@@ -13,6 +13,7 @@ var effectLevelLine = slider.querySelector('.effect-level__line');
 var uploadPreviewImage = document.querySelector('.img-upload__preview img');
 var effectValue = slider.querySelector('.effect-level__value');
 var activeEffectRadio = document.querySelector('.effects__radio:checked');
+var comment = uploadOverlayImage.querySelector('.text__description');
 var ESC_KEYCODE = 27;
 var ENTER_KEYCODE = 13;
 
@@ -209,6 +210,14 @@ uploadClose.addEventListener('keydown', function (evt) {
   if (evt.keyCode === ENTER_KEYCODE) {
     closePopup();
   }
+});
+
+comment.addEventListener('focus', function () {
+  document.removeEventListener('keydown', onPopupEscapePress);
+});
+
+comment.addEventListener('blur', function () {
+  document.addEventListener('keydown', onPopupEscapePress);
 });
 
 addClickEffectListener();
