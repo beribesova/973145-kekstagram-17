@@ -8,8 +8,6 @@ var uploadOverlayImage = document.querySelector('.img-upload__overlay ');
 var uploadClose = uploadOverlayImage.querySelector('#upload-cancel');
 var slider = document.querySelector('.img-upload__effect-level');
 var uploadImageEffects = document.querySelector('.img-upload__effects ');
-// var effectsRadio = document.querySelectorAll('.effects__radio');
-// var effectsList = document.querySelectorAll('.effects__list');
 var effectLevelPin = slider.querySelector('.effect-level__pin');
 var effectLevelLine = slider.querySelector('.effect-level__line');
 var uploadPreviewImage = document.querySelector('.img-upload__preview img');
@@ -154,7 +152,7 @@ var applyEffect = function (effectName, sliderValue) {
 
 };
 
-var onEffectChange = function (effectName, value) {
+var changeEffect = function (effectName, value) {
   uploadPreviewImage.className = '';
   effectValue.classList.remove('hidden');
   uploadPreviewImage.classList.add('effects__preview--' + effectName);
@@ -178,17 +176,17 @@ var hideSlider = function (effect) {
   }
 };
 
-var setEffect = function (effectsToggle) {
-  hideSlider(effectsToggle.id === 'effect-none');
+var setEffect = function (effectToggle) {
+  hideSlider(effectToggle.id === 'effect-none');
   var value = resetEffect();
-  onEffectChange(effectsToggle.value, value);
+  changeEffect(effectToggle.value, value);
 };
 
-var addClickEffectsListener = function () {
+var addClickEffectListener = function () {
   uploadImageEffects.addEventListener('click', function (evt) {
-    var effectsToggle = evt.target;
-    if (effectsToggle.localName === 'input') {
-      setEffect(effectsToggle);
+    var effectToggle = evt.target;
+    if (effectToggle.localName === 'input') {
+      setEffect(effectToggle);
     }
   });
 };
@@ -213,7 +211,7 @@ uploadClose.addEventListener('keydown', function (evt) {
   }
 });
 
-addClickEffectsListener();
+addClickEffectListener();
 
 effectLevelPin.addEventListener('mouseup', function (evt) {
   evt.preventDefault();
