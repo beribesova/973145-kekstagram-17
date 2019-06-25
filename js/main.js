@@ -10,12 +10,15 @@ var slider = document.querySelector('.img-upload__effect-level');
 var uploadImageEffects = document.querySelector('.img-upload__effects ');
 var effectLevelPin = slider.querySelector('.effect-level__pin');
 var effectLevelLine = slider.querySelector('.effect-level__line');
+var effectLevelDepth = slider.querySelector('.effect-level__depth');
 var uploadPreviewImage = document.querySelector('.img-upload__preview img');
 var effectValue = slider.querySelector('.effect-level__value');
 var activeEffectRadio = document.querySelector('.effects__radio:checked');
 var comment = uploadOverlayImage.querySelector('.text__description');
+var noneEffect = document.querySelector('input[value = "none"]');
 var ESC_KEYCODE = 27;
 var ENTER_KEYCODE = 13;
+var RESET_VALUE = 453;
 
 var getRandomNumber = function (min, max) {
   return Math.floor(min + Math.random() * (max + 1 - min));
@@ -112,11 +115,15 @@ var onPopupEscapePress = function (evt) {
 
 var openPopup = function () {
   uploadOverlayImage.classList.remove('hidden');
+  noneEffect.checked = 'checked';
+  slider.classList.add('hidden');
+  changeEffect('none', 0);
   document.addEventListener('keydown', onPopupEscapePress);
 };
 
 var closePopup = function () {
   uploadOverlayImage.classList.add('hidden');
+  uploadPreviewImage.style.filter = '';
   document.removeEventListener('keydown', onPopupEscapePress);
 };
 
@@ -157,6 +164,7 @@ var changeEffect = function (effectName, value) {
   uploadPreviewImage.className = '';
   effectValue.classList.remove('hidden');
   uploadPreviewImage.classList.add('effects__preview--' + effectName);
+
   applyEffect(effectName, value);
 
   if (effectName === 'none') {
@@ -167,6 +175,11 @@ var changeEffect = function (effectName, value) {
 var resetEffect = function () {
   effectValue.value = 100;
   return effectValue.value;
+};
+
+var resetLevelPin = function (dragX) {
+  effectLevelPin.style.left = dragX + 'px';
+  effectLevelDepth.style.width = dragX + 'px';
 };
 
 var hideSlider = function (effect) {
@@ -181,6 +194,7 @@ var setEffect = function (effectToggle) {
   hideSlider(effectToggle.id === 'effect-none');
   var value = resetEffect();
   changeEffect(effectToggle.value, value);
+  resetLevelPin(RESET_VALUE);
 };
 
 var addClickEffectListener = function () {
@@ -226,5 +240,51 @@ effectLevelPin.addEventListener('mouseup', function (evt) {
   evt.preventDefault();
   effectValue.value = Math.round((evt.target.offsetLeft * 100) / effectLevelLine.offsetWidth);
   applyEffect(activeEffectRadio.value, effectValue.value);
+});
+
+var pinCoordinates = function (evt) {
+  var pinPosition = evt.target.offsetLeft;
+  var maxEffectLevel = effectLevelLine.offsetWidth;
+
+  effectLevelLine.value = Math.round(pinPosition * 100 / maxEffectLevel);
+
+  var currentEffect = document.querySelector('input[name = "effect"]:checked').value;
+  applyEffect(currentEffect, effectValue.value);
+};
+
+effectLevelPin.addEventListener('mousedown', function (evt) {
+
+  var startCoords = {
+    x: evt.clientX
+  };
+
+  var onMouseMove = function (moveEvt) {
+
+    var shift = {
+      x: startCoords.x - moveEvt.clientX
+    };
+
+    startCoords = {
+      x: moveEvt.clientX
+    };
+
+    var displacementX = (effectLevelPin.offsetLeft - shift.x);
+    if (displacementX <= 0) {
+      displacementX = 0;
+    } else if (displacementX >= effectLevelLine.offsetWidth) {
+      displacementX = effectLevelLine.offsetWidth;
+    }
+    pinCoordinates(moveEvt);
+    resetLevelPin(displacementX);
+  };
+
+  var onMouseUp = function (upEvt) {
+    pinCoordinates(upEvt);
+    document.removeEventListener('mousemove', onMouseMove);
+    document.removeEventListener('mouseup', onMouseUp);
+  };
+
+  document.addEventListener('mousemove', onMouseMove);
+  document.addEventListener('mouseup', onMouseUp);
 });
 
