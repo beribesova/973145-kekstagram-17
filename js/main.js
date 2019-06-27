@@ -116,15 +116,15 @@ var onPopupEscapePress = function (evt) {
 var openPopup = function () {
   uploadOverlayImage.classList.remove('hidden');
   noneEffect.checked = true;
-  slider.classList.add('hidden');
+  hideSlider('none');
   changeEffect('none');
-  applyCheckedEffect('none', 0);
+  applyEffect('none', 0);
   document.addEventListener('keydown', onPopupEscapePress);
 };
 
 var closePopup = function () {
   uploadOverlayImage.classList.add('hidden');
-  uploadPreviewImage.style.filter = '';
+  applyEffect('none', 0);
   document.removeEventListener('keydown', onPopupEscapePress);
 };
 
@@ -137,7 +137,7 @@ var calculateValue = function (sliderValue, min, max) {
   }
 };
 
-var applyCheckedEffect = function (effectName, sliderValue) {
+var applyEffect = function (effectName, sliderValue) {
   switch (effectName) {
     case 'none':
       uploadPreviewImage.style.filter = '';
@@ -174,7 +174,7 @@ var changeEffect = function (effectName) {
 var resetEffect = function (effect) {
   var resetValue = 100;
   effectValue.value = resetValue;
-  applyCheckedEffect(effect, resetValue);
+  applyEffect(effect, resetValue);
   setLevelPin(RESET_PIN_VALUE);
 };
 
@@ -203,6 +203,16 @@ var getValueInRange = function (value, min, max) {
 
 var getPercent = function (value, base) {
   return Math.round((value * 100) / base);
+};
+
+var applyPinMove = function (startX, evt, shiftX) {
+  var EFFECT_LEVEL_PIN = effectLevelLine.offsetWidth;
+  var displacementX = (effectLevelPin.offsetLeft - shiftX);
+  displacementX = getValueInRange(displacementX, 0, EFFECT_LEVEL_PIN);
+  var percentValue = getPercent(evt.target.offsetLeft, EFFECT_LEVEL_PIN);
+  effectLevelValue.setAttribute('value', percentValue);
+  applyEffect(document.querySelector('input[name = "effect"]:checked').value, percentValue);
+  setLevelPin(displacementX);
 };
 
 var kekstagramPhotoTemplate = document.querySelector('#picture').content;
@@ -246,23 +256,13 @@ effectLevelPin.addEventListener('mousedown', function (evt) {
   var onMouseMove = function (moveEvt) {
     var shiftX = startX - moveEvt.clientX;
     startX = moveEvt.clientX;
-    var displacementX = (effectLevelPin.offsetLeft - shiftX);
-    displacementX = getValueInRange(displacementX, 0, effectLevelLine.offsetWidth);
-    var percentValue = getPercent(evt.target.offsetLeft, effectLevelLine.offsetWidth);
-    effectLevelValue.setAttribute('value', percentValue);
-    applyCheckedEffect(document.querySelector('input[name = "effect"]:checked').value, percentValue);
-    setLevelPin(displacementX);
+    applyPinMove(startX, evt, shiftX);
   };
 
   var onMouseUp = function (upEvt) {
     var shiftX = startX - upEvt.clientX;
     startX = upEvt.clientX;
-    var displacementX = (effectLevelPin.offsetLeft - shiftX);
-    displacementX = getValueInRange(displacementX, 0, effectLevelLine.offsetWidth);
-    var percentValue = getPercent(evt.target.offsetLeft, effectLevelLine.offsetWidth);
-    effectLevelValue.setAttribute('value', percentValue);
-    setLevelPin(displacementX);
-
+    applyPinMove(startX, evt, shiftX);
     document.removeEventListener('mousemove', onMouseMove);
     document.removeEventListener('mouseup', onMouseUp);
   };
