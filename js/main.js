@@ -3,6 +3,9 @@
 var COMMENTS = ['Всё отлично!', 'В целом всё неплохо. Но не всё.', 'Когда вы делаете фотографию, хорошо бы убирать палец из кадра. В конце концов это просто непрофессионально.', 'Моя бабушка случайно чихнула с фотоаппаратом в руках и у неё получилась фотография лучше.', 'Я поскользнулся на банановой кожуре и уронил фотоаппарат на кота и у меня получилась фотография лучше.', 'Лица у людей на фотке перекошены, как будто их избивают. Как можно было поймать такой неудачный момент?!'];
 var NAMES = ['Артем', 'Катя', 'Максим', 'Лиза', 'Евгений', 'Сергей', 'Маша'];
 var COMMENTS_NUMBER = 25;
+var ESC_KEYCODE = 27;
+var ENTER_KEYCODE = 13;
+var RESET_PIN_VALUE = 453;
 var uploadFile = document.querySelector('#upload-file');
 var uploadOverlayImage = document.querySelector('.img-upload__overlay ');
 var uploadClose = uploadOverlayImage.querySelector('#upload-cancel');
@@ -10,12 +13,12 @@ var slider = document.querySelector('.img-upload__effect-level');
 var uploadImageEffects = document.querySelector('.img-upload__effects ');
 var effectLevelPin = slider.querySelector('.effect-level__pin');
 var effectLevelLine = slider.querySelector('.effect-level__line');
+var effectLevelDepth = slider.querySelector('.effect-level__depth');
 var uploadPreviewImage = document.querySelector('.img-upload__preview img');
 var effectValue = slider.querySelector('.effect-level__value');
-var activeEffectRadio = document.querySelector('.effects__radio:checked');
+var effectLevelValue = document.querySelector('.effect-level__value');
 var comment = uploadOverlayImage.querySelector('.text__description');
-var ESC_KEYCODE = 27;
-var ENTER_KEYCODE = 13;
+var noneEffect = document.querySelector('input[value = "none"]');
 
 var getRandomNumber = function (min, max) {
   return Math.floor(min + Math.random() * (max + 1 - min));
@@ -112,11 +115,16 @@ var onPopupEscapePress = function (evt) {
 
 var openPopup = function () {
   uploadOverlayImage.classList.remove('hidden');
+  noneEffect.checked = true;
+  hideSlider('none');
+  changeEffect('none');
+  applyEffect('none', 0);
   document.addEventListener('keydown', onPopupEscapePress);
 };
 
 var closePopup = function () {
   uploadOverlayImage.classList.add('hidden');
+  applyEffect('none', 0);
   document.removeEventListener('keydown', onPopupEscapePress);
 };
 
@@ -153,20 +161,26 @@ var applyEffect = function (effectName, sliderValue) {
 
 };
 
-var changeEffect = function (effectName, value) {
+var changeEffect = function (effectName) {
   uploadPreviewImage.className = '';
   effectValue.classList.remove('hidden');
   uploadPreviewImage.classList.add('effects__preview--' + effectName);
-  applyEffect(effectName, value);
 
   if (effectName === 'none') {
     effectValue.classList.add('hidden');
   }
 };
 
-var resetEffect = function () {
-  effectValue.value = 100;
-  return effectValue.value;
+var resetEffect = function (effect) {
+  var resetValue = 100;
+  effectValue.value = resetValue;
+  applyEffect(effect, resetValue);
+  setLevelPin(RESET_PIN_VALUE);
+};
+
+var setLevelPin = function (level) {
+  effectLevelPin.style.left = level + 'px';
+  effectLevelDepth.style.width = level + 'px';
 };
 
 var hideSlider = function (effect) {
@@ -179,17 +193,26 @@ var hideSlider = function (effect) {
 
 var setEffect = function (effectToggle) {
   hideSlider(effectToggle.id === 'effect-none');
-  var value = resetEffect();
-  changeEffect(effectToggle.value, value);
+  resetEffect(effectToggle.value);
+  changeEffect(effectToggle.value);
 };
 
-var addClickEffectListener = function () {
-  uploadImageEffects.addEventListener('click', function (evt) {
-    var effectToggle = evt.target;
-    if (effectToggle.localName === 'input') {
-      setEffect(effectToggle);
-    }
-  });
+var getValueInRange = function (value, min, max) {
+  return Math.min(Math.max(value, min), max);
+};
+
+var getPercent = function (value, base) {
+  return Math.round((value * 100) / base);
+};
+
+var applyPinMove = function (startX, evt, shiftX) {
+  var EFFECT_LEVEL_PIN = effectLevelLine.offsetWidth;
+  var displacementX = (effectLevelPin.offsetLeft - shiftX);
+  displacementX = getValueInRange(displacementX, 0, EFFECT_LEVEL_PIN);
+  var percentValue = getPercent(evt.target.offsetLeft, EFFECT_LEVEL_PIN);
+  effectLevelValue.setAttribute('value', percentValue);
+  applyEffect(document.querySelector('input[name = "effect"]:checked').value, percentValue);
+  setLevelPin(displacementX);
 };
 
 var kekstagramPhotoTemplate = document.querySelector('#picture').content;
@@ -220,11 +243,30 @@ comment.addEventListener('blur', function () {
   document.addEventListener('keydown', onPopupEscapePress);
 });
 
-addClickEffectListener();
-
-effectLevelPin.addEventListener('mouseup', function (evt) {
-  evt.preventDefault();
-  effectValue.value = Math.round((evt.target.offsetLeft * 100) / effectLevelLine.offsetWidth);
-  applyEffect(activeEffectRadio.value, effectValue.value);
+uploadImageEffects.addEventListener('click', function (evt) {
+  var effectToggle = evt.target;
+  if (effectToggle.localName === 'input') {
+    setEffect(effectToggle);
+  }
 });
 
+effectLevelPin.addEventListener('mousedown', function (evt) {
+  evt.preventDefault();
+  var startX = evt.clientX;
+  var onMouseMove = function (moveEvt) {
+    var shiftX = startX - moveEvt.clientX;
+    startX = moveEvt.clientX;
+    applyPinMove(startX, evt, shiftX);
+  };
+
+  var onMouseUp = function (upEvt) {
+    var shiftX = startX - upEvt.clientX;
+    startX = upEvt.clientX;
+    applyPinMove(startX, evt, shiftX);
+    document.removeEventListener('mousemove', onMouseMove);
+    document.removeEventListener('mouseup', onMouseUp);
+  };
+
+  document.addEventListener('mousemove', onMouseMove);
+  document.addEventListener('mouseup', onMouseUp);
+});
