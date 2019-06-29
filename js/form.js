@@ -17,7 +17,7 @@
   var noneEffect = document.querySelector('input[value = "none"]');
 
   var onPopupEscapePress = function (evt) {
-    window.util.onPopupEscapePress(evt, closePopup);
+    window.util.onEscapePress(evt, closePopup);
   };
 
   var openPopup = function () {
@@ -103,19 +103,11 @@
     changeEffect(effectToggle.value);
   };
 
-  var getValueInRange = function (value, min, max) {
-    return Math.min(Math.max(value, min), max);
-  };
-
-  var getPercent = function (value, base) {
-    return Math.round((value * 100) / base);
-  };
-
   var applyPinMove = function (startX, evt, shiftX) {
     var EFFECT_LEVEL_PIN = effectLevelLine.offsetWidth;
     var displacementX = (effectLevelPin.offsetLeft - shiftX);
-    displacementX = getValueInRange(displacementX, 0, EFFECT_LEVEL_PIN);
-    var percentValue = getPercent(evt.target.offsetLeft, EFFECT_LEVEL_PIN);
+    displacementX = window.util.getValueInRange(displacementX, 0, EFFECT_LEVEL_PIN);
+    var percentValue = window.util.getPercent(evt.target.offsetLeft, EFFECT_LEVEL_PIN);
     effectLevelValue.setAttribute('value', percentValue);
     applyEffect(document.querySelector('input[name = "effect"]:checked').value, percentValue);
     setLevelPin(displacementX);
@@ -146,7 +138,7 @@
   });
 
   uploadClose.addEventListener('keydown', function (evt) {
-    window.util.onPopupEnterEvent(evt, closePopup);
+    window.util.onEnterPress(evt, closePopup);
   });
 
   effectLevelPin.addEventListener('mousedown', function (evt) {

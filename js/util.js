@@ -5,18 +5,24 @@
   var ENTER_KEYCODE = 13;
 
   window.util = {
-    onPopupEscapePress: function (evt, action) {
+    onEscapePress: function (evt, action) {
       if (evt.keyCode === ESC_KEYCODE) {
         action();
       }
     },
-    onPopupEnterPress: function (evt, action) {
+    onEnterPress: function (evt, action) {
       if (evt.keyCode === ENTER_KEYCODE) {
         action();
       }
     },
     getRandomNumber: function (min, max) {
       return Math.floor(min + Math.random() * (max + 1 - min));
+    },
+    getPercent: function (value, base) {
+      return Math.round((value * 100) / base);
+    },
+    getValueInRange: function (value, min, max) {
+      return Math.min(Math.max(value, min), max);
     }
   };
 })();
