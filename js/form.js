@@ -15,6 +15,7 @@
   var effectLevelValue = document.querySelector('.effect-level__value');
   var comment = uploadOverlayImage.querySelector('.text__description');
   var noneEffect = document.querySelector('input[value = "none"]');
+  var form = document.querySelector('.img-upload__form');
 
   var onPopupEscapePress = function (evt) {
     window.util.onEscapePress(evt, closePopup);
@@ -160,5 +161,11 @@
 
     document.addEventListener('mousemove', onMouseMove);
     document.addEventListener('mouseup', onMouseUp);
+  });
+
+  form.addEventListener('submit', function (evt) {
+    var data = new FormData(form);
+    window.save(data, closePopup, window.util.errorHandler);
+    evt.preventDefault();
   });
 })();

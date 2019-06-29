@@ -19,7 +19,7 @@
     fragment.appendChild(renderPhoto(kekstagramPhotoTemplate, photos));
   };
 
-  var createPhotos = function (kekstagramPhotoTemplate, photosData) {
+  var successHandler = function (photosData) {
     var fragment = document.createDocumentFragment();
     for (var i = 0; i < photosData.length; i++) {
       createPhoto(fragment, kekstagramPhotoTemplate, photosData[i]);
@@ -27,8 +27,7 @@
     getPhotoListElement().appendChild(fragment);
   };
 
-  var kekstagramPhotoTemplate = document.querySelector('#picture').content;
+  window.load(successHandler, window.util.errorHandler);
 
-  var photosData = window.picture.getPhotos();
-  createPhotos(kekstagramPhotoTemplate, photosData);
+  var kekstagramPhotoTemplate = document.querySelector('#picture').content;
 })();
