@@ -164,8 +164,8 @@
   });
 
   form.addEventListener('submit', function (evt) {
-    var data = new FormData(form);
-    window.save(data, closePopup, window.util.errorHandler);
     evt.preventDefault();
+    var data = new FormData(form);
+    window.backend.save(data, closePopup, window.gallery.errorHandler);
   });
 })();

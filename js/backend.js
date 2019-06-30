@@ -5,7 +5,7 @@
     POST: 'https://js.dump.academy/kekstagram'
   };
 
-  window.load = function (onSuccess, onError) {
+  var load = function (onSuccess, onError) {
     var xhr = new XMLHttpRequest();
     xhr.responseType = 'json';
 
@@ -29,7 +29,7 @@
     xhr.send();
   };
 
-  window.save = function (data, onSuccess, onError) {
+  var save = function (data, onSuccess, onError) {
     var xhr = new XMLHttpRequest();
 
     xhr.addEventListener('load', function () {
@@ -49,5 +49,10 @@
 
     xhr.open('POST', URL.POST);
     xhr.send(data);
+  };
+
+  window.backend = {
+    load: load,
+    save: save
   };
 })();
