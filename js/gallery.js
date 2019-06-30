@@ -1,12 +1,13 @@
 'use strict';
 
 (function () {
+  var kekstagramPhotoTemplate = document.querySelector('#picture').content;
   var getPhotoListElement = function () {
     var photoListElement = document.querySelector('.pictures');
     return photoListElement;
   };
 
-  var renderPhoto = function (kekstagramPhotoTemplate, photo) {
+  var renderPhoto = function (photo) {
     var kekstagramElement = kekstagramPhotoTemplate.cloneNode(true);
     kekstagramElement.querySelector('img').src = photo.url;
     kekstagramElement.querySelector('.picture__likes').textContent = photo.likes;
@@ -15,20 +16,31 @@
     return kekstagramElement;
   };
 
-  var createPhoto = function (fragment, kekstagramPhotoTemplate, photos) {
-    fragment.appendChild(renderPhoto(kekstagramPhotoTemplate, photos));
+  var createPhoto = function (fragment, photos) {
+    fragment.appendChild(renderPhoto(photos));
   };
 
-  var createPhotos = function (kekstagramPhotoTemplate, photosData) {
+  var successHandler = function (photosData) {
     var fragment = document.createDocumentFragment();
     for (var i = 0; i < photosData.length; i++) {
-      createPhoto(fragment, kekstagramPhotoTemplate, photosData[i]);
+      createPhoto(fragment, photosData[i]);
     }
     getPhotoListElement().appendChild(fragment);
   };
 
-  var kekstagramPhotoTemplate = document.querySelector('#picture').content;
+  var errorHandler = function (errorMessage) {
+    var node = document.createElement('div');
+    node.style = 'z-index: 100; margin: 0 auto; text-align: center; background-color: red;';
+    node.style.position = 'absolute';
+    node.style.left = 0;
+    node.style.right = 0;
+    node.style.fontSize = '30px';
+    node.textContent = errorMessage;
+    document.body.insertAdjacentElement('afterbegin', node);
+  };
 
-  var photosData = window.picture.getPhotos();
-  createPhotos(kekstagramPhotoTemplate, photosData);
+  window.backend.load(successHandler, errorHandler);
+  window.gallery = {
+    errorHandler: errorHandler
+  };
 })();
