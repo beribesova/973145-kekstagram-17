@@ -58,7 +58,11 @@
     return messages;
   };
 
+  var dataOld = getPhotos();
+  var photosDataOld = dataOld.slice();
+
   window.picture = {
-    getPhotos: getPhotos
+    getPhotos: getPhotos,
+    photosDataOld: photosDataOld
   };
 })();

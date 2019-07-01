@@ -28,6 +28,14 @@
     getPhotoListElement().appendChild(fragment);
   };
 
+  var createPhotosFragment = function (photosData) {
+    var fragmentNew = document.createDocumentFragment();
+    for (var i = 0; i < photosData.length; i++) {
+      createPhoto(fragmentNew, photosData[i]);
+    }
+    getPhotoListElement().appendChild(fragmentNew);
+  };
+
   var errorHandler = function (errorMessage) {
     var node = document.createElement('div');
     node.style = 'z-index: 100; margin: 0 auto; text-align: center; background-color: red;';
@@ -41,6 +49,7 @@
 
   window.backend.load(successHandler, errorHandler);
   window.gallery = {
-    errorHandler: errorHandler
+    errorHandler: errorHandler,
+    createPhotosFragment: createPhotosFragment
   };
 })();
