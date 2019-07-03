@@ -1,12 +1,7 @@
 'use strict';
 
 (function () {
-
-  var imgFilter = document.querySelector('.img-filters');
-  var imgFilterForm = imgFilter.querySelector('.img-filters__form');
-  var imgFilterButton = imgFilter.querySelectorAll('.img-filters__button');
   var pictures = document.querySelector('.pictures');
-  var debounceTime = 500;
 
   var deletePhoto = function () {
     var picturePhotos = pictures.querySelectorAll('.picture');
@@ -15,28 +10,14 @@
     }
   };
 
-  var changeColorActiveFilterButton = function (evt) {
-    for (var i = 0; i < imgFilterButton.length; i++) {
-      if (imgFilterButton[i].classList[1] === 'img-filters__button--active') {
-        imgFilterButton[i].classList.remove('img-filters__button--active');
-      }
-    }
-    evt.target.classList.add('img-filters__button--active');
-  };
-
   var getRank = function (left, right) {
     return right.comments.length - left.comments.length;
-  };
-
-  var onFilterButtonClick = function (evt, filters) {
-    changeColorActiveFilterButton(evt);
-    filters[evt.target.id](window.gallery.photosDataOld);
   };
 
   var changeFilters = {
     'filter-popular': function (data) {
       deletePhoto();
-      window.util.debounce(data, debounceTime, window.gallery.debounceFunction);
+      return data;
     },
 
     'filter-new': function (data) {
@@ -54,16 +35,20 @@
         photo.splice(index, 1);
       }
       deletePhoto();
-      window.util.debounce(photoNew, debounceTime, window.gallery.debounceFunction);
+      return photoNew;
     },
 
     'filter-discussed': function (data) {
       deletePhoto();
-      window.util.debounce(data.slice().sort(getRank), debounceTime, window.gallery.debounceFunction);
+      return data.slice().sort(getRank);
     }
   };
-  imgFilter.classList.remove('img-filters--inactive');
-  imgFilterForm.addEventListener('click', function (evt) {
-    onFilterButtonClick(evt, changeFilters);
-  });
+
+  var sortPhoto = function (data, filter) {
+    return changeFilters[filter](data);
+  };
+
+  window.filters = {
+    sortPhoto: sortPhoto
+  };
 })();
