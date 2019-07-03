@@ -6,15 +6,16 @@
   var imgFilterForm = imgFilter.querySelector('.img-filters__form');
   var imgFilterButton = imgFilter.querySelectorAll('.img-filters__button');
   var pictures = document.querySelector('.pictures');
+  var debounceTime = 500;
 
   var deletePhoto = function () {
-    var picturesPhoto = pictures.querySelectorAll('.picture');
-    for (var i = 0; i < picturesPhoto.length; i++) {
-      picturesPhoto[i].parentNode.removeChild(picturesPhoto[i]);
+    var picturePhotos = pictures.querySelectorAll('.picture');
+    for (var i = 0; i < picturePhotos.length; i++) {
+      picturePhotos[i].parentNode.removeChild(picturePhotos[i]);
     }
   };
 
-  var activeFilterButton = function (evt) {
+  var changeColorActiveFilterButton = function (evt) {
     for (var i = 0; i < imgFilterButton.length; i++) {
       if (imgFilterButton[i].classList[1] === 'img-filters__button--active') {
         imgFilterButton[i].classList.remove('img-filters__button--active');
@@ -24,38 +25,21 @@
   };
 
   var getRank = function (left, right) {
-    var value = 0;
-    if (left.comments.length < right.comments.length) {
-      value = 1;
-    } else if (left.comments.length > right.comments.length) {
-      value = -1;
-    } else if (left.comments.length === right.comments.length) {
-      value = 0;
-    }
-    return value;
+    return right.comments.length - left.comments.length;
   };
 
-  var onClickFilterButton = function (evt) {
-    activeFilterButton(evt);
-    if (evt.target.id === 'filter-new') {
-      filters.filterNewPhotos(window.picture.photosDataOld);
-    } else if (evt.target.id === 'filter-popular') {
-      filters.filterPopular(window.picture.photosDataOld);
-    } else if (evt.target.id === 'filter-discussed') {
-      filters.filterDiscussed(window.picture.photosDataOld
-        .slice()
-        .sort(getRank)
-      );
-    }
+  var onFilterButtonClick = function (evt, filters) {
+    changeColorActiveFilterButton(evt);
+    filters[evt.target.id](window.gallery.photosDataOld);
   };
 
-  var filters = {
-    filterPopular: function (data) {
+  var changeFilters = {
+    'filter-popular': function (data) {
       deletePhoto();
-      window.debounce(data);
+      window.util.debounce(data, debounceTime, window.gallery.debounceFunction);
     },
 
-    filterNewPhotos: function (data) {
+    'filter-new': function (data) {
       var numberOfPhotos = 10;
       var photo = data.slice();
       var photoNew = [];
@@ -70,16 +54,16 @@
         photo.splice(index, 1);
       }
       deletePhoto();
-      window.debounce(photoNew);
+      window.util.debounce(photoNew, debounceTime, window.gallery.debounceFunction);
     },
 
-    filterDiscussed: function (data) {
+    'filter-discussed': function (data) {
       deletePhoto();
-      window.debounce(data);
+      window.util.debounce(data.slice().sort(getRank), debounceTime, window.gallery.debounceFunction);
     }
   };
   imgFilter.classList.remove('img-filters--inactive');
   imgFilterForm.addEventListener('click', function (evt) {
-    onClickFilterButton(evt);
+    onFilterButtonClick(evt, changeFilters);
   });
 })();

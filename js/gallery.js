@@ -21,6 +21,7 @@
   };
 
   var successHandler = function (photosData) {
+    window.gallery.photosDataOld = photosData.slice();
     var fragment = document.createDocumentFragment();
     for (var i = 0; i < photosData.length; i++) {
       createPhoto(fragment, photosData[i]);
@@ -47,9 +48,14 @@
     document.body.insertAdjacentElement('afterbegin', node);
   };
 
+  var debounceFunction = function (data) {
+    window.gallery.createPhotosFragment(data);
+  };
+
   window.backend.load(successHandler, errorHandler);
   window.gallery = {
     errorHandler: errorHandler,
-    createPhotosFragment: createPhotosFragment
+    createPhotosFragment: createPhotosFragment,
+    debounceFunction: debounceFunction
   };
 })();
