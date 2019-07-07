@@ -25,7 +25,7 @@
     getValueInRange: function (value, min, max) {
       return Math.min(Math.max(value, min), max);
     },
-    debounce: function (data, debounceTime, debounceFunction) {
+    debounce: function (debounceFunction, data, debounceTime) {
       if (lastTimeout) {
         window.clearTimeout(lastTimeout);
       }

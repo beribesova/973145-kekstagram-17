@@ -2,6 +2,16 @@
 
 (function () {
   var kekstagramPhotoTemplate = document.querySelector('#picture').content;
+  var pictures = document.querySelector('.pictures');
+  var data = [];
+
+  var deletePhoto = function () {
+    var picturePhotos = pictures.querySelectorAll('.picture');
+    for (var i = 0; i < picturePhotos.length; i++) {
+      picturePhotos[i].parentNode.removeChild(picturePhotos[i]);
+    }
+  };
+
   var getPhotoListElement = function () {
     var photoListElement = document.querySelector('.pictures');
     return photoListElement;
@@ -21,12 +31,17 @@
   };
 
   var successHandler = function (photosData) {
-    window.gallery.photosDataOld = photosData.slice();
+    data = photosData.slice();
     var fragment = document.createDocumentFragment();
     for (var i = 0; i < photosData.length; i++) {
       createPhoto(fragment, photosData[i]);
     }
     getPhotoListElement().appendChild(fragment);
+    getPhotosData(data);
+  };
+
+  var getPhotosData = function () {
+    return data.slice();
   };
 
   var createPhotosFragment = function (photosData) {
@@ -48,14 +63,11 @@
     document.body.insertAdjacentElement('afterbegin', node);
   };
 
-  var debounceFunction = function (data) {
-    window.gallery.createPhotosFragment(data);
-  };
-
   window.backend.load(successHandler, errorHandler);
   window.gallery = {
     errorHandler: errorHandler,
     createPhotosFragment: createPhotosFragment,
-    debounceFunction: debounceFunction
+    deletePhoto: deletePhoto,
+    getPhotosData: getPhotosData
   };
 })();

@@ -5,17 +5,9 @@
   var imgFilter = document.querySelector('.img-filters');
   var imgFilterForm = imgFilter.querySelector('.img-filters__form');
   var imgFilterButton = imgFilter.querySelectorAll('.img-filters__button');
-  var pictures = document.querySelector('.pictures');
   var debounceTime = 500;
 
-  var deletePhoto = function () {
-    var picturePhotos = pictures.querySelectorAll('.picture');
-    for (var i = 0; i < picturePhotos.length; i++) {
-      picturePhotos[i].parentNode.removeChild(picturePhotos[i]);
-    }
-  };
-
-  var changeColorActiveFilterButton = function (evt) {
+  var changeActiveFilterColor = function (evt) {
     for (var i = 0; i < imgFilterButton.length; i++) {
       if (imgFilterButton[i].classList[1] === 'img-filters__button--active') {
         imgFilterButton[i].classList.remove('img-filters__button--active');
@@ -29,19 +21,19 @@
   };
 
   var onFilterButtonClick = function (evt, filters) {
-    changeColorActiveFilterButton(evt);
-    filters[evt.target.id](window.gallery.photosDataOld);
+    changeActiveFilterColor(evt);
+    filters[evt.target.id](window.gallery.getPhotosData());
   };
 
   var changeFilters = {
     'filter-popular': function (data) {
-      deletePhoto();
-      window.util.debounce(data, debounceTime, window.gallery.debounceFunction);
+      window.gallery.deletePhoto();
+      window.util.debounce(window.gallery.createPhotosFragment, data, debounceTime);
     },
 
     'filter-new': function (data) {
       var numberOfPhotos = 10;
-      var photo = data.slice();
+      var photo = data;
       var photoNew = [];
 
       if (photo.length < 10) {
@@ -53,13 +45,13 @@
         photoNew[i] = photo[index];
         photo.splice(index, 1);
       }
-      deletePhoto();
-      window.util.debounce(photoNew, debounceTime, window.gallery.debounceFunction);
+      window.gallery.deletePhoto();
+      window.util.debounce(window.gallery.createPhotosFragment, photoNew, debounceTime);
     },
 
     'filter-discussed': function (data) {
-      deletePhoto();
-      window.util.debounce(data.slice().sort(getRank), debounceTime, window.gallery.debounceFunction);
+      window.gallery.deletePhoto();
+      window.util.debounce(window.gallery.createPhotosFragment, data.sort(getRank), debounceTime);
     }
   };
   imgFilter.classList.remove('img-filters--inactive');
