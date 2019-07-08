@@ -2,6 +2,16 @@
 
 (function () {
   var kekstagramPhotoTemplate = document.querySelector('#picture').content;
+  var pictures = document.querySelector('.pictures');
+  var data = [];
+
+  var deletePhoto = function () {
+    var picturePhotos = pictures.querySelectorAll('.picture');
+    for (var i = 0; i < picturePhotos.length; i++) {
+      picturePhotos[i].parentNode.removeChild(picturePhotos[i]);
+    }
+  };
+
   var getPhotoListElement = function () {
     var photoListElement = document.querySelector('.pictures');
     return photoListElement;
@@ -21,6 +31,20 @@
   };
 
   var successHandler = function (photosData) {
+    data = photosData;
+    createPhotosFragment(photosData);
+  };
+
+  var getPhotosData = function () {
+    return data.slice();
+  };
+
+  var refreshPhotos = function (photosData, debounceTime) {
+    deletePhoto();
+    window.util.debounce(createPhotosFragment, photosData, debounceTime);
+  };
+
+  var createPhotosFragment = function (photosData) {
     var fragment = document.createDocumentFragment();
     for (var i = 0; i < photosData.length; i++) {
       createPhoto(fragment, photosData[i]);
@@ -41,6 +65,9 @@
 
   window.backend.load(successHandler, errorHandler);
   window.gallery = {
-    errorHandler: errorHandler
+    errorHandler: errorHandler,
+    createPhotosFragment: createPhotosFragment,
+    getPhotosData: getPhotosData,
+    refreshPhotos: refreshPhotos
   };
 })();

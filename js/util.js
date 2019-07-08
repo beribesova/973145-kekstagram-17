@@ -3,6 +3,7 @@
 (function () {
   var ESC_KEYCODE = 27;
   var ENTER_KEYCODE = 13;
+  var lastTimeout = null;
 
   window.util = {
     onEscapePress: function (evt, action) {
@@ -23,6 +24,12 @@
     },
     getValueInRange: function (value, min, max) {
       return Math.min(Math.max(value, min), max);
+    },
+    debounce: function (debounceFunction, data, debounceTime) {
+      if (lastTimeout) {
+        window.clearTimeout(lastTimeout);
+      }
+      lastTimeout = window.setTimeout(debounceFunction(data), debounceTime);
     }
   };
 })();
