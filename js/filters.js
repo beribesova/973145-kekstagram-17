@@ -9,7 +9,7 @@
 
   var changeActiveFilterColor = function (evt) {
     for (var i = 0; i < imgFilterButton.length; i++) {
-      if (imgFilterButton[i].classList[1] === 'img-filters__button--active') {
+      if (imgFilterButton[i].classList.contains('img-filters__button--active')) {
         imgFilterButton[i].classList.remove('img-filters__button--active');
       }
     }
@@ -27,31 +27,23 @@
 
   var changeFilters = {
     'filter-popular': function (data) {
-      window.gallery.deletePhoto();
-      window.util.debounce(window.gallery.createPhotosFragment, data, debounceTime);
+      window.gallery.refreshPhotos(data, debounceTime);
     },
 
     'filter-new': function (data) {
-      var numberOfPhotos = 10;
-      var photo = data;
+      var numberOfPhotos = data.length < 10 ? data.length : 10;
       var photoNew = [];
 
-      if (photo.length < 10) {
-        numberOfPhotos = photo.length;
-      }
-
       for (var i = 0; i < numberOfPhotos; i++) {
-        var index = window.util.getRandomNumber(0, photo.length - 1);
-        photoNew[i] = photo[index];
-        photo.splice(index, 1);
+        var index = window.util.getRandomNumber(0, data.length - 1);
+        photoNew[i] = data[index];
+        data.splice(index, 1);
       }
-      window.gallery.deletePhoto();
-      window.util.debounce(window.gallery.createPhotosFragment, photoNew, debounceTime);
+      window.gallery.refreshPhotos(photoNew, debounceTime);
     },
 
     'filter-discussed': function (data) {
-      window.gallery.deletePhoto();
-      window.util.debounce(window.gallery.createPhotosFragment, data.sort(getRank), debounceTime);
+      window.gallery.refreshPhotos(data.sort(getRank), debounceTime);
     }
   };
   imgFilter.classList.remove('img-filters--inactive');

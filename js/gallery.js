@@ -31,25 +31,25 @@
   };
 
   var successHandler = function (photosData) {
-    data = photosData.slice();
-    var fragment = document.createDocumentFragment();
-    for (var i = 0; i < photosData.length; i++) {
-      createPhoto(fragment, photosData[i]);
-    }
-    getPhotoListElement().appendChild(fragment);
-    getPhotosData(data);
+    data = photosData;
+    createPhotosFragment(photosData);
   };
 
   var getPhotosData = function () {
     return data.slice();
   };
 
+  var refreshPhotos = function (photosData, debounceTime) {
+    deletePhoto();
+    window.util.debounce(createPhotosFragment, photosData, debounceTime);
+  };
+
   var createPhotosFragment = function (photosData) {
-    var fragmentNew = document.createDocumentFragment();
+    var fragment = document.createDocumentFragment();
     for (var i = 0; i < photosData.length; i++) {
-      createPhoto(fragmentNew, photosData[i]);
+      createPhoto(fragment, photosData[i]);
     }
-    getPhotoListElement().appendChild(fragmentNew);
+    getPhotoListElement().appendChild(fragment);
   };
 
   var errorHandler = function (errorMessage) {
@@ -67,7 +67,7 @@
   window.gallery = {
     errorHandler: errorHandler,
     createPhotosFragment: createPhotosFragment,
-    deletePhoto: deletePhoto,
-    getPhotosData: getPhotosData
+    getPhotosData: getPhotosData,
+    refreshPhotos: refreshPhotos
   };
 })();
