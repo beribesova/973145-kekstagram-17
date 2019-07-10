@@ -4,7 +4,6 @@
   var kekstagramPhotoTemplate = document.querySelector('#picture').content;
   var pictures = document.querySelector('.pictures');
   var data = [];
-  window.dataArray = [];
 
   var deletePhoto = function () {
     var picturePhotos = pictures.querySelectorAll('.picture');
@@ -33,7 +32,6 @@
 
   var successHandler = function (photosData) {
     data = photosData;
-    window.dataArray = photosData;
     createPhotosFragment(photosData);
   };
 
