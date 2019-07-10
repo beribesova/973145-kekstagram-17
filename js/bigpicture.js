@@ -45,7 +45,7 @@
   var onClickPictures = function (evt) {
     var data = window.gallery.getPhotosData();
     if (evt.target.tagName === 'IMG') {
-      var imgSrc = evt.target.parentNode.querySelector('img').getAttribute('src')
+      var imgSrc = evt.target.parentNode.querySelector('img').getAttribute('src');
       setBigPicture(imgSrc, data);
       openBigPicture();
       pictures.removeEventListener('click', onClickPictures);
