@@ -1,7 +1,6 @@
 'use strict';
 
 (function () {
-
   var imgFilter = document.querySelector('.img-filters');
   var imgFilterForm = imgFilter.querySelector('.img-filters__form');
   var imgFilterButton = imgFilter.querySelectorAll('.img-filters__button');
@@ -22,7 +21,7 @@
 
   var onFilterButtonClick = function (evt, filters) {
     changeActiveFilterColor(evt);
-    filters[evt.target.id](window.gallery.getPhotosData());
+    window.util.debounce(filters[evt.target.id], window.gallery.getPhotosData(), debounceTime);
   };
 
   var changeFilters = {
