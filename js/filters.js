@@ -7,6 +7,7 @@
   var imgFilterButton = imgFilter.querySelectorAll('.img-filters__button');
   var debounceTime = 500;
 
+
   var changeActiveFilterColor = function (evt) {
     for (var i = 0; i < imgFilterButton.length; i++) {
       if (imgFilterButton[i].classList.contains('img-filters__button--active')) {
