@@ -29,10 +29,6 @@
     window.scale.scalePictureEdit();
   };
 
-  window.scale.scalePictureEdit();
-  scalePicturePlus.addEventListener('click', scalePictureEditPlus);
-  scalePictureMinus.addEventListener('click', scalePictureEditMinus);
-
   window.scale = {
     percentScale: 100,
     scalePictureEdit: function () {
@@ -40,4 +36,8 @@
       imagePreview.style.transform = 'scale(' + this.percentScale / 100 + ')';
     }
   };
+
+  window.scale.scalePictureEdit();
+  scalePicturePlus.addEventListener('click', scalePictureEditPlus);
+  scalePictureMinus.addEventListener('click', scalePictureEditMinus);
 })();
