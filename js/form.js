@@ -167,5 +167,7 @@
     evt.preventDefault();
     var data = new FormData(form);
     window.backend.save(data, closePopup, window.gallery.errorHandler);
+    window.scale.percentScale = 100;
+    window.scale.scalePictureEdit();
   });
 })();
