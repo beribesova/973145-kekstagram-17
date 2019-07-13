@@ -16,6 +16,7 @@
   var comment = uploadOverlayImage.querySelector('.text__description');
   var noneEffect = document.querySelector('input[value = "none"]');
   var form = document.querySelector('.img-upload__form');
+  var MAX_SCALE = 100;
 
   var onPopupEscapePress = function (evt) {
     window.util.onEscapePress(evt, closePopup);
@@ -167,7 +168,6 @@
     evt.preventDefault();
     var data = new FormData(form);
     window.backend.save(data, closePopup, window.gallery.errorHandler);
-    window.scale.percentScale = 100;
-    window.scale.scalePictureEdit();
+    window.scale.editScalePicture(MAX_SCALE);
   });
 })();
