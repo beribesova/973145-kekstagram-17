@@ -15,19 +15,19 @@
   };
 
   var editScalePicturePlus = function () {
-    window.scale.percentScale = parseInt(getScaleValue(), 10);
-    if (window.scale.percentScale + SCALE_STEP <= MAX_SCALE) {
-      window.scale.percentScale += SCALE_STEP;
+    var percentScale = parseInt(getScaleValue(), 10);
+    if (percentScale + SCALE_STEP <= MAX_SCALE) {
+      percentScale += SCALE_STEP;
     }
-    window.scale.editScalePicture(window.scale.percentScale);
+    window.scale.editScalePicture(percentScale);
   };
 
   var editScalePictureMinus = function () {
-    window.scale.percentScale = parseInt(getScaleValue(), 10);
-    if (window.scale.percentScale - SCALE_STEP >= MIN_SCALE) {
-      window.scale.percentScale -= SCALE_STEP;
+    var percentScale = parseInt(getScaleValue(), 10);
+    if (percentScale - SCALE_STEP >= MIN_SCALE) {
+      percentScale -= SCALE_STEP;
     }
-    window.scale.editScalePicture(window.scale.percentScale);
+    window.scale.editScalePicture(percentScale);
   };
 
   var editScalePicture = function (percentScale) {
@@ -37,10 +37,9 @@
 
   scalePicturePlus.addEventListener('click', editScalePicturePlus);
   scalePictureMinus.addEventListener('click', editScalePictureMinus);
+  editScalePicture(MAX_SCALE);
 
   window.scale = {
-    percentScale: MAX_SCALE,
     editScalePicture: editScalePicture
   };
-  window.scale.editScalePicture(window.scale.percentScale);
 })();
