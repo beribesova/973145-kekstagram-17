@@ -14,32 +14,33 @@
     return scalePictureValue.value.slice(0, -1);
   };
 
-  var editScalePicturePlus = function () {
+  var increasePictureScale = function () {
     var percentScale = parseInt(getScaleValue(), 10);
     if (percentScale + SCALE_STEP <= MAX_SCALE) {
       percentScale += SCALE_STEP;
     }
-    window.scale.editScalePicture(percentScale);
+    editPictureScale(percentScale);
   };
 
-  var editScalePictureMinus = function () {
+  var decreasePictureScale = function () {
     var percentScale = parseInt(getScaleValue(), 10);
     if (percentScale - SCALE_STEP >= MIN_SCALE) {
       percentScale -= SCALE_STEP;
     }
-    window.scale.editScalePicture(percentScale);
+    editPictureScale(percentScale);
   };
 
-  var editScalePicture = function (percentScale) {
+  var editPictureScale = function (percentScale) {
     scalePictureValue.setAttribute('value', percentScale + '%');
     imagePreview.style.transform = 'scale(' + percentScale / MAX_SCALE + ')';
   };
 
-  scalePicturePlus.addEventListener('click', editScalePicturePlus);
-  scalePictureMinus.addEventListener('click', editScalePictureMinus);
-  editScalePicture(MAX_SCALE);
+  scalePicturePlus.addEventListener('click', increasePictureScale);
+  scalePictureMinus.addEventListener('click', decreasePictureScale);
+  editPictureScale(MAX_SCALE);
 
   window.scale = {
-    editScalePicture: editScalePicture
+    editPictureScale: editPictureScale,
+    MAX_SCALE: MAX_SCALE
   };
 })();

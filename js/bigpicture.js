@@ -10,8 +10,9 @@
   var lastRenderedCommentIdx = 0;
   var COMMENTS_LENGHT = 5;
   var pictureData;
+  var COMMENT_IMAGE_SIZE = '35';
 
-  var setComments = function (photos, quantity, commentAdd) {
+  var getComments = function (photos, quantity, commentAdd) {
     var commentsArray = [];
     for (var i = quantity; i < quantity + commentAdd; i++) {
       var comment = document.createElement('li');
@@ -21,8 +22,8 @@
       commentImage.classList.add('social__picture');
       commentImage.src = photos.comments[i].avatar;
       commentImage.alt = photos.comments[i].name;
-      commentImage.width = '35';
-      commentImage.height = '35';
+      commentImage.width = COMMENT_IMAGE_SIZE;
+      commentImage.height = COMMENT_IMAGE_SIZE;
       comment.appendChild(commentImage);
       var commentText = document.createElement('p');
       commentText.classList.add('social__text');
@@ -59,7 +60,7 @@
 
   var renderComments = function (data) {
     var commentAdd = window.util.getValueInRange(data.comments.length - lastRenderedCommentIdx, 0, COMMENTS_LENGHT);
-    var commentsArray = setComments(data, lastRenderedCommentIdx, commentAdd);
+    var commentsArray = getComments(data, lastRenderedCommentIdx, commentAdd);
     var fragment = document.createDocumentFragment();
 
     for (var i = 0; i < commentsArray.length; i++) {
