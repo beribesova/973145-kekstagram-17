@@ -39,12 +39,12 @@
 
   var onSuccess = function () {
     closePopup();
-    window.upload.showSuccessPopup();
+    window.formUploadPopup.showSuccessPopup();
   };
 
   var onError = function () {
     closePopup();
-    window.upload.showErrorPopup();
+    window.formUploadPopup.showErrorPopup();
   };
 
   var calculateValue = function (sliderValue, min, max) {

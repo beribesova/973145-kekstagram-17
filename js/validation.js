@@ -3,60 +3,66 @@
   var textHashtags = document.querySelector('.text__hashtags');
   var commentsInput = document.querySelector('.text__description');
 
-  var renderArraySplit = function () {
-    var hashtagArray = [];
+  var onHashtagInputChange = function () {
+    var hashtags = [];
     if (textHashtags.value.length > 0) {
-      hashtagArray = textHashtags.value.toLowerCase().split(' ');
-      validityInputHashtag(hashtagArray);
+      hashtags = textHashtags.value.toLowerCase().split(' ');
+      validateHashtags(hashtags);
     } else {
       textHashtags.setCustomValidity('');
       textHashtags.style.border = '';
     }
   };
 
-  var errorHashtag = function () {
+  var highlightsInvalidField = function () {
     textHashtags.style.border = '3px solid red';
   };
 
-  var validityInputHashtag = function (arrayHashteg) {
-    var hashtegArr = arrayHashteg;
-    var searchDouble = [];
+  var checkQuantity = function (hashtagArray) {
+    if (hashtagArray.length > 5) {
+      return true;
+    }
+    return false;
+  };
 
-    for (var i = 0; i < hashtegArr.length; i++) {
-      if (hashtegArr[i].length < 3) {
-        textHashtags.setCustomValidity('Хэштэг должен состоять как минимум из 3х символов');
-        errorHashtag();
-      } else if (hashtegArr[i][0] !== '#') {
-        textHashtags.setCustomValidity('Хэштэг должен начинаться с символа #');
-        errorHashtag();
-      } else if (hashtegArr[i].indexOf('#', 1) > 0) {
-        textHashtags.setCustomValidity('Хэштэги должны разделяться пробелом');
-        errorHashtag();
-      } else if (i >= 5) {
-        textHashtags.setCustomValidity('Не больше 5ти хэштегов');
-        errorHashtag();
-      } else if (hashtegArr[i].length > 20) {
-        textHashtags.setCustomValidity('Длина одного хэштега не должна превышать 20 символов');
-        errorHashtag();
-      } else if (searchDouble.indexOf(hashtegArr[i]) !== -1) {
-        textHashtags.setCustomValidity('Хэштэги повторяются');
-        errorHashtag();
+  var validateHashtags = function (hashtags) {
+    var uniqueHashtags = [];
+    var validationErrors = '';
+    for (var i = 0; i < hashtags.length; i++) {
+      var hashtag = hashtags[i];
+      if (hashtag[0] !== '#') {
+        validationErrors += 'Хэштэг должен начинаться с символа #\n';
+      } else if (hashtag.indexOf('#', 1) > 0) {
+        validationErrors += 'Хэштэги должны разделяться пробелом\n';
+      } else if (hashtag.length < 2) {
+        validationErrors += 'Хэштэг не может быть пустым\n';
+      } else if (checkQuantity(hashtags) === true) {
+        textHashtags.setCustomValidity('Не больше 5ти хэштегов\n');
+      } else if (hashtag.length > 20) {
+        validationErrors += 'Длина одного хэштега не должна превышать 20 символов\n';
+      } else if (uniqueHashtags.indexOf(hashtag) !== -1) {
+        validationErrors += 'Хэштэги повторяются\n';
       } else {
         textHashtags.setCustomValidity('');
         textHashtags.style.border = '';
       }
-      searchDouble.push(hashtegArr[i]);
+      if (validationErrors !== '') {
+        textHashtags.setCustomValidity(validationErrors);
+        highlightsInvalidField();
+      }
+      uniqueHashtags.push(hashtag);
     }
   };
 
-  var onTextComment = function () {
+  var onCommentInputChange = function () {
     if (commentsInput.value.length > 140) {
       commentsInput.setCustomValidity('Комментарий не должен превышать 140 символов');
       commentsInput.style.border = '3px solid red';
     } else {
+      commentsInput.setCustomValidity('');
       commentsInput.style.border = '';
     }
   };
-  textHashtags.addEventListener('input', renderArraySplit);
-  commentsInput.addEventListener('input', onTextComment);
+  textHashtags.addEventListener('input', onHashtagInputChange);
+  commentsInput.addEventListener('input', onCommentInputChange);
 })();
