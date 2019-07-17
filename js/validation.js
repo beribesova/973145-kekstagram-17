@@ -30,11 +30,11 @@
     var validationErrors = '';
     for (var i = 0; i < hashtags.length; i++) {
       var hashtag = hashtags[i];
-      if (hashtag[0] !== '#') {
+      if (hashtag[0] !== '#' && hashtag.length > 0) {
         validationErrors += 'Хэштэг должен начинаться с символа #\n';
       } else if (hashtag.indexOf('#', 1) > 0) {
         validationErrors += 'Хэштэги должны разделяться пробелом\n';
-      } else if (hashtag.length < 2) {
+      } else if (hashtag.length > 0 && hashtag.length < 2) {
         validationErrors += 'Хэштэг не может быть пустым\n';
       } else if (checkQuantity(hashtags) === true) {
         textHashtags.setCustomValidity('Не больше 5ти хэштегов\n');
