@@ -17,13 +17,18 @@
     textHashtags.style.border = '3px solid red';
   };
 
+  var hashtagFiltering = function (hashtag) {
+    return hashtag.length >= 1;
+  };
+
   var isValidQuantity = function (hashtagArray) {
     return hashtagArray.length > 5;
   };
 
-  var validateHashtags = function (hashtags) {
+  var validateHashtags = function (hashtagArray) {
     var uniqueHashtags = [];
     var validationErrors = '';
+    var hashtags = hashtagArray.filter(hashtagFiltering);
 
     if (isValidQuantity(hashtags) === true) {
       validationErrors += 'Не больше 5ти хэштегов\n';
