@@ -4,9 +4,8 @@
   var commentsInput = document.querySelector('.text__description');
 
   var onHashtagInputChange = function () {
-    var hashtags = [];
     if (textHashtags.value.length > 0) {
-      hashtags = textHashtags.value.toLowerCase().split(' ');
+      var hashtags = textHashtags.value.toLowerCase().split(' ');
       validateHashtags(hashtags);
     } else {
       textHashtags.setCustomValidity('');
@@ -14,20 +13,22 @@
     }
   };
 
-  var highlightsInvalidField = function () {
+  var highlightInvalidField = function () {
     textHashtags.style.border = '3px solid red';
   };
 
-  var checkQuantity = function (hashtagArray) {
-    if (hashtagArray.length > 5) {
-      return true;
-    }
-    return false;
+  var isValidQuantity = function (hashtagArray) {
+    return hashtagArray.length > 5;
   };
 
   var validateHashtags = function (hashtags) {
     var uniqueHashtags = [];
     var validationErrors = '';
+
+    if (isValidQuantity(hashtags) === true) {
+      validationErrors += 'Не больше 5ти хэштегов\n';
+    }
+
     for (var i = 0; i < hashtags.length; i++) {
       var hashtag = hashtags[i];
       if (hashtag[0] !== '#' && hashtag.length > 0) {
@@ -36,22 +37,19 @@
         validationErrors += 'Хэштэги должны разделяться пробелом\n';
       } else if (hashtag.length > 0 && hashtag.length < 2) {
         validationErrors += 'Хэштэг не может быть пустым\n';
-      } else if (checkQuantity(hashtags) === true) {
-        textHashtags.setCustomValidity('Не больше 5ти хэштегов\n');
       } else if (hashtag.length > 20) {
         validationErrors += 'Длина одного хэштега не должна превышать 20 символов\n';
       } else if (uniqueHashtags.indexOf(hashtag) !== -1) {
         validationErrors += 'Хэштэги повторяются\n';
       } else {
-        textHashtags.setCustomValidity('');
         textHashtags.style.border = '';
-      }
-      if (validationErrors !== '') {
-        textHashtags.setCustomValidity(validationErrors);
-        highlightsInvalidField();
       }
       uniqueHashtags.push(hashtag);
     }
+    if (validationErrors !== '') {
+      highlightInvalidField();
+    }
+    textHashtags.setCustomValidity(validationErrors);
   };
 
   var onCommentInputChange = function () {

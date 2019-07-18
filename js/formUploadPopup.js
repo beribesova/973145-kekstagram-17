@@ -14,14 +14,14 @@
     var success = main.querySelector('.success');
     main.removeChild(success);
     document.removeEventListener('keydown', onSuccessBlockEscape);
-    document.removeEventListener('click', onClickSuccessPopup);
+    document.removeEventListener('click', onClickSuccessPopupOutside);
   };
 
   var hideErrorBlock = function () {
     var error = main.querySelector('.error');
     main.removeChild(error);
     document.removeEventListener('keydown', onErrorBlockEscape);
-    document.removeEventListener('click', onClickErrorPopup);
+    document.removeEventListener('click', onClickErrorPopupOutside);
   };
 
   var onSuccessBlockEscape = function (evt) {
@@ -32,7 +32,7 @@
     window.util.onEscapePress(evt, hideErrorBlock);
   };
 
-  var onClickSuccessPopup = function (evt) {
+  var onClickSuccessPopupOutside = function (evt) {
     var successBlock = main.querySelector('.success__inner');
     var isClickInside = successBlock.contains(evt.target);
     if (!isClickInside) {
@@ -40,7 +40,7 @@
     }
   };
 
-  var onClickErrorPopup = function (evt) {
+  var onClickErrorPopupOutside = function (evt) {
     var errorBlock = main.querySelector('.error__inner');
     var isClickInside = errorBlock.contains(evt.target);
     if (!isClickInside) {
@@ -48,19 +48,27 @@
     }
   };
 
+  var onClickSuccessButton = function () {
+    hideSuccessBlock();
+  };
+
+  var onClickErrorButton = function () {
+    hideErrorBlock();
+  };
+
   var showSuccessPopup = function () {
     createPopupMessage(templateSuccess);
     var successButton = main.querySelector('.success__button');
-    document.addEventListener('click', onClickSuccessPopup);
-    successButton.addEventListener('click', hideSuccessBlock);
+    document.addEventListener('click', onClickSuccessPopupOutside);
+    successButton.addEventListener('click', onClickSuccessButton);
     document.addEventListener('keydown', onSuccessBlockEscape);
   };
 
   var showErrorPopup = function () {
     createPopupMessage(templateError);
     var errorButtons = main.querySelector('.error__buttons');
-    document.addEventListener('click', onClickErrorPopup);
-    errorButtons.addEventListener('click', hideErrorBlock);
+    document.addEventListener('click', onClickErrorPopupOutside);
+    errorButtons.addEventListener('click', onClickErrorButton);
     document.addEventListener('keydown', onErrorBlockEscape);
   };
 
