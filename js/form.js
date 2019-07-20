@@ -17,6 +17,7 @@
   var hashtags = uploadOverlayImage.querySelector('.text__hashtags');
   var noneEffect = document.querySelector('input[value = "none"]');
   var form = document.querySelector('.img-upload__form');
+  var formInput = document.querySelector('.img-upload__input');
 
   var onPopupEscapePress = function (evt) {
     window.util.onEscapePress(evt, closePopup);
@@ -35,6 +36,9 @@
     uploadOverlayImage.classList.add('hidden');
     applyEffect('none', 0);
     document.removeEventListener('keydown', onPopupEscapePress);
+    hashtags.value = '';
+    comment.value = '';
+    formInput.value = '';
   };
 
   var onSuccess = function () {
