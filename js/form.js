@@ -14,8 +14,10 @@
   var effectValue = slider.querySelector('.effect-level__value');
   var effectLevelValue = document.querySelector('.effect-level__value');
   var comment = uploadOverlayImage.querySelector('.text__description');
+  var hashtags = uploadOverlayImage.querySelector('.text__hashtags');
   var noneEffect = document.querySelector('input[value = "none"]');
   var form = document.querySelector('.img-upload__form');
+  var formInput = document.querySelector('.img-upload__input');
 
   var onPopupEscapePress = function (evt) {
     window.util.onEscapePress(evt, closePopup);
@@ -34,6 +36,19 @@
     uploadOverlayImage.classList.add('hidden');
     applyEffect('none', 0);
     document.removeEventListener('keydown', onPopupEscapePress);
+    hashtags.value = '';
+    comment.value = '';
+    formInput.value = '';
+  };
+
+  var onSuccess = function () {
+    closePopup();
+    window.formUploadPopup.showSuccessPopup();
+  };
+
+  var onError = function () {
+    closePopup();
+    window.formUploadPopup.showErrorPopup();
   };
 
   var calculateValue = function (sliderValue, min, max) {
@@ -122,6 +137,14 @@
     document.addEventListener('keydown', onPopupEscapePress);
   });
 
+  hashtags.addEventListener('focus', function () {
+    document.removeEventListener('keydown', onPopupEscapePress);
+  });
+
+  hashtags.addEventListener('blur', function () {
+    document.addEventListener('keydown', onPopupEscapePress);
+  });
+
   uploadImageEffects.addEventListener('click', function (evt) {
     var effectToggle = evt.target;
     if (effectToggle.localName === 'input') {
@@ -166,7 +189,7 @@
   form.addEventListener('submit', function (evt) {
     evt.preventDefault();
     var data = new FormData(form);
-    window.backend.save(data, closePopup, window.gallery.errorHandler);
+    window.backend.save(data, onSuccess, onError);
     window.scale.editPictureScale(window.scale.MAX_SCALE);
   });
 })();

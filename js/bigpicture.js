@@ -1,6 +1,7 @@
 'use strict';
 (function () {
 
+  var body = document.body;
   var pictures = document.querySelector('.pictures');
   var bigPicture = document.querySelector('.big-picture');
   var bigPictureImage = bigPicture.querySelector('.big-picture__img');
@@ -44,6 +45,7 @@
 
   var closeBigPicture = function () {
     bigPicture.classList.add('hidden');
+    body.classList.remove('modal-open');
     bigPictureCancel.removeEventListener('keydown', onPopupEnterPress);
     document.removeEventListener('keydown', onPopupEscapePress);
     pictures.addEventListener('click', onClickPictures);
@@ -52,6 +54,7 @@
 
   var openBigPicture = function () {
     bigPicture.classList.remove('hidden');
+    body.classList.add('modal-open');
     bigPictureCancel.addEventListener('click', closeBigPicture);
     bigPictureCancel.addEventListener('keydown', onPopupEnterPress);
     document.addEventListener('keydown', onPopupEscapePress);
@@ -68,7 +71,7 @@
     }
     lastRenderedCommentIdx += commentAdd;
     if (lastRenderedCommentIdx === data.comments.length) {
-      commentsLoader.classList.add('visually-hidden');
+      commentsLoader.classList.add('hidden');
     }
     bigPicture.querySelector('.social__comments').appendChild(fragment);
     bigPicture.querySelector('.social__comment-count').innerHTML = lastRenderedCommentIdx + ' из <span class="comments-count">' + data.comments.length + '</span> комментариев';
