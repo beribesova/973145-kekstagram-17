@@ -3,10 +3,14 @@
   var textHashtags = document.querySelector('.text__hashtags');
   var commentsInput = document.querySelector('.text__description');
 
+  var isValidLenght = function (hashtag) {
+    return hashtag.length > 0;
+  };
+
   var onHashtagInputChange = function () {
     if (textHashtags.value.length > 0) {
       var hashtags = textHashtags.value.toLowerCase().split(' ');
-      validateHashtags(hashtags);
+      validateHashtags(hashtags.filter(isValidLenght));
     } else {
       textHashtags.setCustomValidity('');
       textHashtags.style.border = '';
@@ -15,48 +19,39 @@
 
   var highlightInvalidField = function (reset) {
     textHashtags.style.border = '3px solid red';
-    if (reset === true) {
+    if (reset) {
       textHashtags.style.border = '';
     }
   };
 
-  var isValidLenght = function (hashtag) {
-    return hashtag.length > 0;
+  var isInvalidQuantity = function (hashtags) {
+    return hashtags.length > 5;
   };
 
-  var isValidQuantity = function (hashtagArray) {
-    return hashtagArray.length > 5;
-  };
-
-  var validateHashtags = function (hashtagArray) {
+  var validateHashtags = function (hashtags) {
     var uniqueHashtags = [];
     var validationErrors = '';
-    var hashtags = hashtagArray.filter(isValidLenght);
 
-    if (isValidQuantity(hashtags)) {
-      validationErrors += 'Не больше 5ти хэштегов\n';
+    if (isInvalidQuantity(hashtags)) {
+      validationErrors += 'Не больше 5ти хэштегов; ';
     }
 
     for (var i = 0; i < hashtags.length; i++) {
       var hashtag = hashtags[i];
       if (hashtag[0] !== '#') {
-        validationErrors += 'Хэштэг должен начинаться с символа #\n';
+        validationErrors += 'Хэштэг должен начинаться с символа #; ';
       } else if (hashtag.indexOf('#', 1) > 0) {
-        validationErrors += 'Хэштэги должны разделяться пробелом\n';
+        validationErrors += 'Хэштэги должны разделяться пробелом; ';
       } else if (hashtag.length < 2) {
-        validationErrors += 'Хэштэг не может быть пустым\n';
+        validationErrors += 'Хэштэг не может быть пустым; ';
       } else if (hashtag.length > 20) {
-        validationErrors += 'Длина одного хэштега не должна превышать 20 символов\n';
+        validationErrors += 'Длина одного хэштега не должна превышать 20 символов; ';
       } else if (uniqueHashtags.indexOf(hashtag) !== -1) {
-        validationErrors += 'Хэштэги повторяются\n';
-      } else {
-        highlightInvalidField(true);
+        validationErrors += 'Хэштэги повторяются; ';
       }
       uniqueHashtags.push(hashtag);
     }
-    if (validationErrors !== '') {
-      highlightInvalidField();
-    }
+    highlightInvalidField(validationErrors === '');
     textHashtags.setCustomValidity(validationErrors);
   };
 
