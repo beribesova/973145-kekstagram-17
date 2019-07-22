@@ -18,6 +18,8 @@
   var noneEffect = document.querySelector('input[value = "none"]');
   var form = document.querySelector('.img-upload__form');
   var formInput = document.querySelector('.img-upload__input');
+  var textHashtags = document.querySelector('.text__hashtags');
+  var commentsInput = document.querySelector('.text__description');
 
   var onPopupEscapePress = function (evt) {
     window.util.onEscapePress(evt, closePopup);
@@ -39,6 +41,8 @@
     hashtags.value = '';
     comment.value = '';
     formInput.value = '';
+    textHashtags.style.border = '';
+    commentsInput.style.border = '';
   };
 
   var onSuccess = function () {
@@ -119,7 +123,7 @@
     changeEffect(effectToggle.value);
   };
 
-  var applyPinMove = function (startX, evt, shiftX) {
+  var applyPinMove = function (evt, shiftX) {
     var EFFECT_LEVEL_PIN = effectLevelLine.offsetWidth;
     var displacementX = (effectLevelPin.offsetLeft - shiftX);
     displacementX = window.util.getValueInRange(displacementX, 0, EFFECT_LEVEL_PIN);
@@ -171,13 +175,13 @@
     var onMouseMove = function (moveEvt) {
       var shiftX = startX - moveEvt.clientX;
       startX = moveEvt.clientX;
-      applyPinMove(startX, evt, shiftX);
+      applyPinMove(evt, shiftX);
     };
 
     var onMouseUp = function (upEvt) {
       var shiftX = startX - upEvt.clientX;
       startX = upEvt.clientX;
-      applyPinMove(startX, evt, shiftX);
+      applyPinMove(evt, shiftX);
       document.removeEventListener('mousemove', onMouseMove);
       document.removeEventListener('mouseup', onMouseUp);
     };
