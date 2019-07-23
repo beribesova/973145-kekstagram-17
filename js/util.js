@@ -13,7 +13,7 @@
     },
     onEnterPress: function (evt, action) {
       if (evt.keyCode === ENTER_KEYCODE) {
-        action();
+        action(evt);
       }
     },
     getRandomNumber: function (min, max) {

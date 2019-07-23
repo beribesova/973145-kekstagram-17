@@ -18,8 +18,6 @@
   var noneEffect = document.querySelector('input[value = "none"]');
   var form = document.querySelector('.img-upload__form');
   var formInput = document.querySelector('.img-upload__input');
-  var textHashtags = document.querySelector('.text__hashtags');
-  var commentsInput = document.querySelector('.text__description');
 
   var onPopupEscapePress = function (evt) {
     window.util.onEscapePress(evt, closePopup);
@@ -41,8 +39,8 @@
     hashtags.value = '';
     comment.value = '';
     formInput.value = '';
-    textHashtags.style.border = '';
-    commentsInput.style.border = '';
+    hashtags.style.border = '';
+    comment.style.border = '';
   };
 
   var onSuccess = function () {
@@ -133,19 +131,29 @@
     setLevelPin(displacementX);
   };
 
+  var denySending = function (evt) {
+    evt.preventDefault();
+  };
+
+  var onInputEnterPress = function (evt) {
+    window.util.onEnterPress(evt, denySending);
+  };
+
+  hashtags.addEventListener('focus', function () {
+    document.removeEventListener('keydown', onPopupEscapePress);
+    document.addEventListener('keydown', onInputEnterPress);
+  });
+
+  hashtags.addEventListener('blur', function () {
+    document.addEventListener('keydown', onPopupEscapePress);
+    document.removeEventListener('keydown', onInputEnterPress);
+  });
+
   comment.addEventListener('focus', function () {
     document.removeEventListener('keydown', onPopupEscapePress);
   });
 
   comment.addEventListener('blur', function () {
-    document.addEventListener('keydown', onPopupEscapePress);
-  });
-
-  hashtags.addEventListener('focus', function () {
-    document.removeEventListener('keydown', onPopupEscapePress);
-  });
-
-  hashtags.addEventListener('blur', function () {
     document.addEventListener('keydown', onPopupEscapePress);
   });
 
