@@ -3,7 +3,7 @@
 (function () {
   var ESC_KEYCODE = 27;
   var ENTER_KEYCODE = 13;
-  var lastTimeout = null;
+  var lastTimeout = 0;
 
   window.util = {
     onEscapePress: function (evt, action) {
@@ -29,7 +29,7 @@
       if (lastTimeout) {
         window.clearTimeout(lastTimeout);
       }
-      lastTimeout = window.setTimeout(debounceFunction(data), debounceTime);
+      lastTimeout = window.setTimeout(debounceFunction.bind(null, data), debounceTime);
     }
   };
 })();
