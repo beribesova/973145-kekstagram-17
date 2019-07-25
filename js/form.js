@@ -39,6 +39,8 @@
     hashtags.value = '';
     comment.value = '';
     formInput.value = '';
+    hashtags.style.border = '';
+    comment.style.border = '';
   };
 
   var onSuccess = function () {
@@ -119,7 +121,7 @@
     changeEffect(effectToggle.value);
   };
 
-  var applyPinMove = function (startX, evt, shiftX) {
+  var applyPinMove = function (evt, shiftX) {
     var EFFECT_LEVEL_PIN = effectLevelLine.offsetWidth;
     var displacementX = (effectLevelPin.offsetLeft - shiftX);
     displacementX = window.util.getValueInRange(displacementX, 0, EFFECT_LEVEL_PIN);
@@ -129,19 +131,29 @@
     setLevelPin(displacementX);
   };
 
+  var denySending = function (evt) {
+    evt.preventDefault();
+  };
+
+  var onInputEnterPress = function (evt) {
+    window.util.onEnterPress(evt, denySending);
+  };
+
+  hashtags.addEventListener('focus', function () {
+    document.removeEventListener('keydown', onPopupEscapePress);
+    document.addEventListener('keydown', onInputEnterPress);
+  });
+
+  hashtags.addEventListener('blur', function () {
+    document.addEventListener('keydown', onPopupEscapePress);
+    document.removeEventListener('keydown', onInputEnterPress);
+  });
+
   comment.addEventListener('focus', function () {
     document.removeEventListener('keydown', onPopupEscapePress);
   });
 
   comment.addEventListener('blur', function () {
-    document.addEventListener('keydown', onPopupEscapePress);
-  });
-
-  hashtags.addEventListener('focus', function () {
-    document.removeEventListener('keydown', onPopupEscapePress);
-  });
-
-  hashtags.addEventListener('blur', function () {
     document.addEventListener('keydown', onPopupEscapePress);
   });
 
@@ -171,13 +183,13 @@
     var onMouseMove = function (moveEvt) {
       var shiftX = startX - moveEvt.clientX;
       startX = moveEvt.clientX;
-      applyPinMove(startX, evt, shiftX);
+      applyPinMove(evt, shiftX);
     };
 
     var onMouseUp = function (upEvt) {
       var shiftX = startX - upEvt.clientX;
       startX = upEvt.clientX;
-      applyPinMove(startX, evt, shiftX);
+      applyPinMove(evt, shiftX);
       document.removeEventListener('mousemove', onMouseMove);
       document.removeEventListener('mouseup', onMouseUp);
     };

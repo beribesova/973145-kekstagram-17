@@ -1,14 +1,14 @@
 'use strict';
 
 (function () {
+  var SCALE_STEP = 25;
+  var MIN_SCALE = 25;
+  var MAX_SCALE = 100;
   var scalePicture = document.querySelector('.img-upload__scale');
   var scalePictureValue = scalePicture.querySelector('.scale__control--value');
   var scalePictureMinus = scalePicture.querySelector('.scale__control--smaller');
   var scalePicturePlus = scalePicture.querySelector('.scale__control--bigger');
   var imagePreview = document.querySelector('.img-upload__preview').querySelector('img');
-  var SCALE_STEP = 25;
-  var MIN_SCALE = 25;
-  var MAX_SCALE = 100;
 
   var getScaleValue = function () {
     return scalePictureValue.value.slice(0, -1);

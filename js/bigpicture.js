@@ -1,6 +1,7 @@
 'use strict';
 (function () {
-
+  var COMMENTS_LENGHT = 5;
+  var COMMENT_IMAGE_SIZE = '35';
   var body = document.body;
   var pictures = document.querySelector('.pictures');
   var bigPicture = document.querySelector('.big-picture');
@@ -9,16 +10,13 @@
   var commentsLoader = bigPicture.querySelector('.comments-loader');
   var bigPictureCancel = document.querySelector('.big-picture__cancel');
   var lastRenderedCommentIdx = 0;
-  var COMMENTS_LENGHT = 5;
   var pictureData;
-  var COMMENT_IMAGE_SIZE = '35';
 
   var getComments = function (photos, quantity, commentAdd) {
     var commentsArray = [];
     for (var i = quantity; i < quantity + commentAdd; i++) {
       var comment = document.createElement('li');
       comment.classList.add('social__comment');
-      comment.classList.add('social__comment--text');
       var commentImage = document.createElement('img');
       commentImage.classList.add('social__picture');
       commentImage.src = photos.comments[i].avatar;
