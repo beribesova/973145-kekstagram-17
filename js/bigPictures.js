@@ -88,7 +88,7 @@
         bigPictureImage.querySelector('img').src = pictureData.url;
         bigPicture.querySelector('.social__comments').innerHTML = '';
         if (commentsLoader.classList.contains('social__comments-loader')) {
-          commentsLoader.classList.remove('visually-hidden');
+          commentsLoader.classList.remove('hidden');
         }
         lastRenderedCommentIdx = 0;
         renderComments(pictureData);
