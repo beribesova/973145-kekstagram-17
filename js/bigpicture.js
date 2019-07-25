@@ -80,7 +80,7 @@
   };
 
   var setBigPicture = function (imgSrc, data) {
-    data.map(function (element) {
+    data.forEach(function (element) {
       if (element.url === imgSrc) {
         pictureData = element;
         bigPictureImage.querySelector('img').src = pictureData.url;
