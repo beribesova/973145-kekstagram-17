@@ -14,17 +14,17 @@
     return scalePictureValue.value.slice(0, -1);
   };
 
-  var increasePictureScale = function () {
+  var onIncreasePictureScaleClick = function () {
     var percentScale = parseInt(getScaleValue(), 10);
-    if (percentScale + SCALE_STEP <= MAX_SCALE) {
+    if (percentScale + SCALE_STEP < MAX_SCALE || percentScale + SCALE_STEP === MAX_SCALE) {
       percentScale += SCALE_STEP;
     }
     editPictureScale(percentScale);
   };
 
-  var decreasePictureScale = function () {
+  var onDecreasePictureScaleClick = function () {
     var percentScale = parseInt(getScaleValue(), 10);
-    if (percentScale - SCALE_STEP >= MIN_SCALE) {
+    if (percentScale - SCALE_STEP > MIN_SCALE || percentScale - SCALE_STEP === MIN_SCALE) {
       percentScale -= SCALE_STEP;
     }
     editPictureScale(percentScale);
@@ -35,8 +35,8 @@
     imagePreview.style.transform = 'scale(' + percentScale / MAX_SCALE + ')';
   };
 
-  scalePicturePlus.addEventListener('click', increasePictureScale);
-  scalePictureMinus.addEventListener('click', decreasePictureScale);
+  scalePicturePlus.addEventListener('click', onIncreasePictureScaleClick);
+  scalePictureMinus.addEventListener('click', onDecreasePictureScaleClick);
   editPictureScale(MAX_SCALE);
 
   window.scale = {

@@ -48,9 +48,10 @@
 
   var createPhotosFragment = function (photosData) {
     var fragment = document.createDocumentFragment();
-    for (var i = 0; i < photosData.length; i++) {
-      createPhoto(fragment, photosData[i]);
-    }
+    photosData.forEach(function (element) {
+      createPhoto(fragment, element);
+    });
+
     getPhotoListElement().appendChild(fragment);
   };
 

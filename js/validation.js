@@ -30,29 +30,30 @@
 
   var validateHashtags = function (hashtags) {
     var uniqueHashtags = [];
-    var validationErrors = '';
+    var validationError = '';
 
     if (isInvalidQuantity(hashtags)) {
-      validationErrors += 'Не больше 5ти хэштегов; ';
+      validationError += 'Не больше 5ти хэштегов; ';
     }
 
-    for (var i = 0; i < hashtags.length; i++) {
-      var hashtag = hashtags[i];
+    hashtags.forEach(function (element) {
+      var hashtag = element;
       if (hashtag[0] !== '#') {
-        validationErrors += 'Хэштэг должен начинаться с символа #; ';
+        validationError += 'Хэштэг должен начинаться с символа #; ';
       } else if (hashtag.indexOf('#', 1) > 0) {
-        validationErrors += 'Хэштэги должны разделяться пробелом; ';
+        validationError += 'Хэштэги должны разделяться пробелом; ';
       } else if (hashtag.length < 2) {
-        validationErrors += 'Хэштэг не может быть пустым; ';
+        validationError += 'Хэштэг не может быть пустым; ';
       } else if (hashtag.length > 20) {
-        validationErrors += 'Длина одного хэштега не должна превышать 20 символов; ';
+        validationError += 'Длина одного хэштега не должна превышать 20 символов; ';
       } else if (uniqueHashtags.indexOf(hashtag) !== -1) {
-        validationErrors += 'Хэштэги повторяются; ';
+        validationError += 'Хэштэги повторяются; ';
       }
       uniqueHashtags.push(hashtag);
-    }
-    highlightInvalidField(validationErrors === '');
-    textHashtags.setCustomValidity(validationErrors);
+    });
+
+    highlightInvalidField(validationError === '');
+    textHashtags.setCustomValidity(validationError);
   };
 
   var onCommentInputChange = function () {

@@ -2,6 +2,7 @@
 
 (function () {
   var DEBOUNCE_TIME = 500;
+  var NEW_PHOTOS_QUANTITY = 10;
   var imgFilter = document.querySelector('.img-filters');
   var imgFilterForm = imgFilter.querySelector('.img-filters__form');
   var imgFilterButton = imgFilter.querySelectorAll('.img-filters__button');
@@ -30,7 +31,7 @@
     },
 
     'filter-new': function (data) {
-      var numberOfPhotos = data.length < 10 ? data.length : 10;
+      var numberOfPhotos = data.length < NEW_PHOTOS_QUANTITY ? data.length : NEW_PHOTOS_QUANTITY;
       var photos = [];
 
       for (var i = 0; i < numberOfPhotos; i++) {
