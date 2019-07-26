@@ -30,12 +30,6 @@
         window.clearTimeout(lastTimeout);
       }
       lastTimeout = window.setTimeout(debounceFunction.bind(null, data), debounceTime);
-    },
-    debounceTwo: function (debounceFunction, debounceTime) {
-      if (lastTimeout) {
-        window.clearTimeout(lastTimeout);
-      }
-      lastTimeout = window.setTimeout(debounceFunction, debounceTime);
     }
   };
 })();
