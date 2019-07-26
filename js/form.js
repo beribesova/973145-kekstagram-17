@@ -2,6 +2,7 @@
 
 (function () {
   var RESET_PIN_VALUE = 453;
+  var RESET_PERCENT_VALUE = 100;
   var uploadFile = document.querySelector('#upload-file');
   var uploadOverlayImage = document.querySelector('.img-upload__overlay ');
   var uploadClose = uploadOverlayImage.querySelector('#upload-cancel');
@@ -95,9 +96,8 @@
   };
 
   var resetEffect = function (effect) {
-    var resetValue = 100;
-    effectValue.value = resetValue;
-    applyEffect(effect, resetValue);
+    effectValue.value = RESET_PERCENT_VALUE;
+    applyEffect(effect, RESET_PERCENT_VALUE);
     setLevelPin(RESET_PIN_VALUE);
   };
 

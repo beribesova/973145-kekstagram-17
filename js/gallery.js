@@ -8,9 +8,9 @@
 
   var deletePhoto = function () {
     var picturePhotos = pictures.querySelectorAll('.picture');
-    for (var i = 0; i < picturePhotos.length; i++) {
-      picturePhotos[i].parentNode.removeChild(picturePhotos[i]);
-    }
+    picturePhotos.forEach(function (picture) {
+      picture.parentNode.removeChild(picture);
+    });
   };
 
   var getPhotoListElement = function () {
