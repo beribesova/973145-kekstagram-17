@@ -27,7 +27,7 @@
 
   var changeFilters = {
     'filter-popular': function (data) {
-      window.gallery.refreshPhotos(data, DEBOUNCE_TIME);
+      window.gallery.refreshPhotos(data);
     },
 
     'filter-new': function (data) {
@@ -39,11 +39,11 @@
         photos[i] = data[index];
         data.splice(index, 1);
       }
-      window.gallery.refreshPhotos(photos, DEBOUNCE_TIME);
+      window.gallery.refreshPhotos(photos);
     },
 
     'filter-discussed': function (data) {
-      window.gallery.refreshPhotos(data.sort(getRank), DEBOUNCE_TIME);
+      window.gallery.refreshPhotos(data.sort(getRank));
     }
   };
   imgFilter.classList.remove('img-filters--inactive');

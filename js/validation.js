@@ -36,8 +36,7 @@
       validationError += 'Не больше 5ти хэштегов; ';
     }
 
-    hashtags.forEach(function (element) {
-      var hashtag = element;
+    hashtags.forEach(function (hashtag) {
       if (hashtag[0] !== '#') {
         validationError += 'Хэштэг должен начинаться с символа #; ';
       } else if (hashtag.indexOf('#', 1) > 0) {

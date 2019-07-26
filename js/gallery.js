@@ -41,15 +41,15 @@
     return data.slice();
   };
 
-  var refreshPhotos = function (photosData, debounceTime) {
+  var refreshPhotos = function (photosData) {
     deletePhoto();
-    window.util.debounce(createPhotosFragment, photosData, debounceTime);
+    createPhotosFragment(photosData);
   };
 
   var createPhotosFragment = function (photosData) {
     var fragment = document.createDocumentFragment();
-    photosData.forEach(function (element) {
-      createPhoto(fragment, element);
+    photosData.forEach(function (photoData) {
+      createPhoto(fragment, photoData);
     });
 
     getPhotoListElement().appendChild(fragment);

@@ -64,8 +64,8 @@
     var comments = getComments(data, lastRenderedCommentIdx, remainingCommentsQuantity);
     var fragment = document.createDocumentFragment();
 
-    comments.forEach(function (element) {
-      fragment.appendChild(element);
+    comments.forEach(function (comment) {
+      fragment.appendChild(comment);
     });
 
     lastRenderedCommentIdx += remainingCommentsQuantity;
@@ -82,9 +82,9 @@
 
   var setBigPicture = function (imgSrc, data) {
 
-    data.forEach(function (element) {
-      if (element.url === imgSrc) {
-        pictureData = element;
+    data.forEach(function (dataItem) {
+      if (dataItem.url === imgSrc) {
+        pictureData = dataItem;
         bigPictureImage.querySelector('img').src = pictureData.url;
         bigPicture.querySelector('.social__comments').innerHTML = '';
         if (commentsLoader.classList.contains('social__comments-loader')) {
@@ -92,8 +92,8 @@
         }
         lastRenderedCommentIdx = 0;
         renderComments(pictureData);
-        bigPictureSocial.querySelector('.social__caption').textContent = element.description;
-        bigPictureSocial.querySelector('.likes-count').textContent = element.likes;
+        bigPictureSocial.querySelector('.social__caption').textContent = dataItem.description;
+        bigPictureSocial.querySelector('.likes-count').textContent = dataItem.likes;
       }
     });
   };
