@@ -16,7 +16,7 @@
 
   var onIncreasePictureScaleClick = function () {
     var percentScale = parseInt(getScaleValue(), 10);
-    if (percentScale + SCALE_STEP < MAX_SCALE || percentScale + SCALE_STEP === MAX_SCALE) {
+    if (percentScale + SCALE_STEP <= MAX_SCALE) {
       percentScale += SCALE_STEP;
     }
     editPictureScale(percentScale);
@@ -24,7 +24,7 @@
 
   var onDecreasePictureScaleClick = function () {
     var percentScale = parseInt(getScaleValue(), 10);
-    if (percentScale - SCALE_STEP > MIN_SCALE || percentScale - SCALE_STEP === MIN_SCALE) {
+    if (percentScale - SCALE_STEP >= MIN_SCALE) {
       percentScale -= SCALE_STEP;
     }
     editPictureScale(percentScale);
