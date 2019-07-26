@@ -2,6 +2,7 @@
 
 (function () {
   var DEBOUNCE_TIME = 500;
+  var NEW_PHOTOS_QUANTITY = 10;
   var imgFilter = document.querySelector('.img-filters');
   var imgFilterForm = imgFilter.querySelector('.img-filters__form');
   var imgFilterButton = imgFilter.querySelectorAll('.img-filters__button');
@@ -26,11 +27,11 @@
 
   var changeFilters = {
     'filter-popular': function (data) {
-      window.gallery.refreshPhotos(data, DEBOUNCE_TIME);
+      window.gallery.refreshPhotos(data);
     },
 
     'filter-new': function (data) {
-      var numberOfPhotos = data.length < 10 ? data.length : 10;
+      var numberOfPhotos = data.length < NEW_PHOTOS_QUANTITY ? data.length : NEW_PHOTOS_QUANTITY;
       var photos = [];
 
       for (var i = 0; i < numberOfPhotos; i++) {
@@ -38,11 +39,11 @@
         photos[i] = data[index];
         data.splice(index, 1);
       }
-      window.gallery.refreshPhotos(photos, DEBOUNCE_TIME);
+      window.gallery.refreshPhotos(photos);
     },
 
     'filter-discussed': function (data) {
-      window.gallery.refreshPhotos(data.sort(getRank), DEBOUNCE_TIME);
+      window.gallery.refreshPhotos(data.sort(getRank));
     }
   };
   imgFilter.classList.remove('img-filters--inactive');

@@ -14,14 +14,14 @@
     var success = main.querySelector('.success');
     main.removeChild(success);
     document.removeEventListener('keydown', onSuccessBlockEscape);
-    document.removeEventListener('click', onClickSuccessPopupOutside);
+    document.removeEventListener('click', onSuccessPopupOutsideClick);
   };
 
   var hideErrorBlock = function () {
     var error = main.querySelector('.error');
     main.removeChild(error);
     document.removeEventListener('keydown', onErrorBlockEscape);
-    document.removeEventListener('click', onClickErrorPopupOutside);
+    document.removeEventListener('click', onErrorPopupOutsideClick);
   };
 
   var onSuccessBlockEscape = function (evt) {
@@ -32,7 +32,7 @@
     window.util.onEscapePress(evt, hideErrorBlock);
   };
 
-  var onClickSuccessPopupOutside = function (evt) {
+  var onSuccessPopupOutsideClick = function (evt) {
     var successBlock = main.querySelector('.success__inner');
     var isClickInside = successBlock.contains(evt.target);
     if (!isClickInside) {
@@ -40,7 +40,7 @@
     }
   };
 
-  var onClickErrorPopupOutside = function (evt) {
+  var onErrorPopupOutsideClick = function (evt) {
     var errorBlock = main.querySelector('.error__inner');
     var isClickInside = errorBlock.contains(evt.target);
     if (!isClickInside) {
@@ -48,32 +48,32 @@
     }
   };
 
-  var onClickSuccessButton = function () {
+  var onSuccessButtonClick = function () {
     hideSuccessBlock();
   };
 
-  var onClickErrorButton = function () {
+  var onErrorButtonClick = function () {
     hideErrorBlock();
   };
 
-  var showSuccessPopup = function () {
+  var showSuccessMessage = function () {
     createPopupMessage(templateSuccess);
     var successButton = main.querySelector('.success__button');
-    document.addEventListener('click', onClickSuccessPopupOutside);
-    successButton.addEventListener('click', onClickSuccessButton);
+    document.addEventListener('click', onSuccessPopupOutsideClick);
+    successButton.addEventListener('click', onSuccessButtonClick);
     document.addEventListener('keydown', onSuccessBlockEscape);
   };
 
-  var showErrorPopup = function () {
+  var showErrorMessage = function () {
     createPopupMessage(templateError);
-    var errorButtons = main.querySelector('.error__buttons');
-    document.addEventListener('click', onClickErrorPopupOutside);
-    errorButtons.addEventListener('click', onClickErrorButton);
+    var errorButtonsElement = main.querySelector('.error__buttons');
+    document.addEventListener('click', onErrorPopupOutsideClick);
+    errorButtonsElement.addEventListener('click', onErrorButtonClick);
     document.addEventListener('keydown', onErrorBlockEscape);
   };
 
   window.formUploadPopup = {
-    showSuccessPopup: showSuccessPopup,
-    showErrorPopup: showErrorPopup
+    showSuccessMessage: showSuccessMessage,
+    showErrorMessage: showErrorMessage
   };
 })();

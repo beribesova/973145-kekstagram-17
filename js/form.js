@@ -45,20 +45,19 @@
 
   var onSuccess = function () {
     closePopup();
-    window.formUploadPopup.showSuccessPopup();
+    window.formUploadPopup.showSuccessMessage();
   };
 
   var onError = function () {
     closePopup();
-    window.formUploadPopup.showErrorPopup();
+    window.formUploadPopup.showErrorMessage();
   };
 
   var calculateValue = function (sliderValue, min, max) {
     if (sliderValue === 0) {
       return min;
-    } else {
-      return ((max - min) * sliderValue) / 100 + min;
     }
+    return ((max - min) * sliderValue) / 100 + min;
   };
 
   var applyEffect = function (effectName, sliderValue) {
@@ -122,10 +121,10 @@
   };
 
   var applyPinMove = function (evt, shiftX) {
-    var EFFECT_LEVEL_PIN = effectLevelLine.offsetWidth;
+    var effectLevelPinWidth = effectLevelLine.offsetWidth;
     var displacementX = (effectLevelPin.offsetLeft - shiftX);
-    displacementX = window.util.getValueInRange(displacementX, 0, EFFECT_LEVEL_PIN);
-    var percentValue = window.util.getPercent(evt.target.offsetLeft, EFFECT_LEVEL_PIN);
+    displacementX = window.util.getValueInRange(displacementX, 0, effectLevelPinWidth);
+    var percentValue = window.util.getPercent(evt.target.offsetLeft, effectLevelPinWidth);
     effectLevelValue.setAttribute('value', percentValue);
     applyEffect(document.querySelector('input[name = "effect"]:checked').value, percentValue);
     setLevelPin(displacementX);
