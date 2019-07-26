@@ -2,11 +2,11 @@
 
 (function () {
   var main = document.querySelector('main');
-  var templateSuccess = document.querySelector('#success').content.querySelector('.success').cloneNode(true);
-  var templateError = document.querySelector('#error').content.querySelector('.error').cloneNode(true);
+  var successElement = document.querySelector('#success').content.querySelector('.success').cloneNode(true);
+  var errorElement = document.querySelector('#error').content.querySelector('.error').cloneNode(true);
 
-  main.appendChild(templateSuccess);
-  main.appendChild(templateError);
+  main.appendChild(successElement);
+  main.appendChild(errorElement);
   var success = main.querySelector('.success');
   var error = main.querySelector('.error');
   var successBlock = main.querySelector('.success__inner');
