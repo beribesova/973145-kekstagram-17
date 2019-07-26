@@ -2,24 +2,28 @@
 
 (function () {
   var main = document.querySelector('main');
-  var templateSuccess = document.querySelector('#success').content.querySelector('.success');
-  var templateError = document.querySelector('#error').content.querySelector('.error');
+  var templateSuccess = document.querySelector('#success').content.querySelector('.success').cloneNode(true);
+  var templateError = document.querySelector('#error').content.querySelector('.error').cloneNode(true);
 
-  var createPopupMessage = function (template) {
-    var templateMessage = template.cloneNode(true);
-    main.appendChild(templateMessage);
-  };
+  main.appendChild(templateSuccess);
+  main.appendChild(templateError);
+  var success = main.querySelector('.success');
+  var error = main.querySelector('.error');
+  var successBlock = main.querySelector('.success__inner');
+  var errorBlock = main.querySelector('.error__inner');
+  var successButton = main.querySelector('.success__button');
+  var errorButtonsElement = main.querySelector('.error__buttons');
+  success.classList.add('visually-hidden');
+  error.classList.add('visually-hidden');
 
   var hideSuccessBlock = function () {
-    var success = main.querySelector('.success');
-    main.removeChild(success);
+    success.classList.add('visually-hidden');
     document.removeEventListener('keydown', onSuccessBlockEscape);
     document.removeEventListener('click', onSuccessPopupOutsideClick);
   };
 
   var hideErrorBlock = function () {
-    var error = main.querySelector('.error');
-    main.removeChild(error);
+    error.classList.add('visually-hidden');
     document.removeEventListener('keydown', onErrorBlockEscape);
     document.removeEventListener('click', onErrorPopupOutsideClick);
   };
@@ -33,7 +37,6 @@
   };
 
   var onSuccessPopupOutsideClick = function (evt) {
-    var successBlock = main.querySelector('.success__inner');
     var isClickInside = successBlock.contains(evt.target);
     if (!isClickInside) {
       hideSuccessBlock();
@@ -41,7 +44,6 @@
   };
 
   var onErrorPopupOutsideClick = function (evt) {
-    var errorBlock = main.querySelector('.error__inner');
     var isClickInside = errorBlock.contains(evt.target);
     if (!isClickInside) {
       hideErrorBlock();
@@ -57,16 +59,14 @@
   };
 
   var showSuccessMessage = function () {
-    createPopupMessage(templateSuccess);
-    var successButton = main.querySelector('.success__button');
+    success.classList.remove('visually-hidden');
     document.addEventListener('click', onSuccessPopupOutsideClick);
     successButton.addEventListener('click', onSuccessButtonClick);
     document.addEventListener('keydown', onSuccessBlockEscape);
   };
 
   var showErrorMessage = function () {
-    createPopupMessage(templateError);
-    var errorButtonsElement = main.querySelector('.error__buttons');
+    error.classList.remove('visually-hidden');
     document.addEventListener('click', onErrorPopupOutsideClick);
     errorButtonsElement.addEventListener('click', onErrorButtonClick);
     document.addEventListener('keydown', onErrorBlockEscape);
