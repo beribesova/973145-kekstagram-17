@@ -19,7 +19,8 @@
   var noneEffect = document.querySelector('input[value = "none"]');
   var form = document.querySelector('.img-upload__form');
   var formInput = document.querySelector('.img-upload__input');
-  var pictures = document.querySelector('.pictures');
+  var picturesElement = document.querySelector('.pictures');
+  var preview = document.querySelector('.img-upload__preview img');
   var onPopupEscapePress = function (evt) {
     window.util.onEscapePress(evt, closePopup);
   };
@@ -30,8 +31,9 @@
     hideSlider('none');
     changeEffect('none');
     applyEffect('none', 0);
+    preview.src = '';
     document.addEventListener('keydown', onPopupEscapePress);
-    pictures.removeEventListener('click', window.bigPicture.onPicturesClick);
+    picturesElement.removeEventListener('click', window.bigPicture.onPicturesClick);
   };
 
   var closePopup = function () {
@@ -43,7 +45,8 @@
     formInput.value = '';
     hashtags.style.border = '';
     comment.style.border = '';
-    pictures.addEventListener('click', window.bigPicture.onPicturesClick);
+    preview.src = '';
+    picturesElement.addEventListener('click', window.bigPicture.onPicturesClick);
   };
 
   var onSuccess = function () {

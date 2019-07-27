@@ -7,7 +7,7 @@
     POST: 'https://js.dump.academy/kekstagram'
   };
 
-  var checkConnect = function (onSuccess, onError, method, data, timeoutValue, responseTypeName) {
+  var createXhr = function (onSuccess, onError, method, data, timeoutValue, responseTypeName) {
     var xhr = new XMLHttpRequest();
     if (responseTypeName) {
       xhr.responseType = responseTypeName;
@@ -40,11 +40,11 @@
   };
 
   var load = function (onSuccess, onError) {
-    checkConnect(onSuccess, onError, 'GET', null, TIMEOUT_VALUE, 'json');
+    createXhr(onSuccess, onError, 'GET', null, TIMEOUT_VALUE, 'json');
   };
 
   var save = function (data, onSuccess, onError) {
-    checkConnect(onSuccess, onError, 'POST', data);
+    createXhr(onSuccess, onError, 'POST', data);
   };
 
   window.backend = {
