@@ -19,7 +19,7 @@
   var noneEffect = document.querySelector('input[value = "none"]');
   var form = document.querySelector('.img-upload__form');
   var formInput = document.querySelector('.img-upload__input');
-
+  var pictures = document.querySelector('.pictures');
   var onPopupEscapePress = function (evt) {
     window.util.onEscapePress(evt, closePopup);
   };
@@ -31,6 +31,7 @@
     changeEffect('none');
     applyEffect('none', 0);
     document.addEventListener('keydown', onPopupEscapePress);
+    pictures.removeEventListener('click', window.bigPicture.onPicturesClick);
   };
 
   var closePopup = function () {
@@ -42,6 +43,7 @@
     formInput.value = '';
     hashtags.style.border = '';
     comment.style.border = '';
+    pictures.addEventListener('click', window.bigPicture.onPicturesClick);
   };
 
   var onSuccess = function () {
@@ -201,6 +203,6 @@
     evt.preventDefault();
     var data = new FormData(form);
     window.backend.save(data, onSuccess, onError);
-    window.scale.editPictureScale(window.scale.MAX_SCALE);
+    window.scale.editPictureSize(window.scale.MAX_SIZE);
   });
 })();

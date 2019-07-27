@@ -5,12 +5,12 @@
   var NEW_PHOTOS_QUANTITY = 10;
   var imgFilter = document.querySelector('.img-filters');
   var imgFilterForm = imgFilter.querySelector('.img-filters__form');
-  var imgFilterButton = imgFilter.querySelectorAll('.img-filters__button');
+  var imgFilterButtons = imgFilter.querySelectorAll('.img-filters__button');
 
   var changeActiveFilterColor = function (evt) {
-    for (var i = 0; i < imgFilterButton.length; i++) {
-      if (imgFilterButton[i].classList.contains('img-filters__button--active')) {
-        imgFilterButton[i].classList.remove('img-filters__button--active');
+    for (var i = 0; i < imgFilterButtons.length; i++) {
+      if (imgFilterButtons[i].classList.contains('img-filters__button--active')) {
+        imgFilterButtons[i].classList.remove('img-filters__button--active');
       }
     }
     evt.target.classList.add('img-filters__button--active');

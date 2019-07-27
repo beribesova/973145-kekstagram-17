@@ -2,8 +2,8 @@
 
 (function () {
   var SCALE_STEP = 25;
-  var MIN_SCALE = 25;
-  var MAX_SCALE = 100;
+  var MIN_SIZE = 25;
+  var MAX_SIZE = 100;
   var scalePicture = document.querySelector('.img-upload__scale');
   var scalePictureValue = scalePicture.querySelector('.scale__control--value');
   var scalePictureMinus = scalePicture.querySelector('.scale__control--smaller');
@@ -16,31 +16,31 @@
 
   var onIncreasePictureScaleClick = function () {
     var percentScale = parseInt(getScaleValue(), 10);
-    if (percentScale + SCALE_STEP <= MAX_SCALE) {
+    if (percentScale + SCALE_STEP <= MAX_SIZE) {
       percentScale += SCALE_STEP;
     }
-    editPictureScale(percentScale);
+    editPictureSize(percentScale);
   };
 
   var onDecreasePictureScaleClick = function () {
     var percentScale = parseInt(getScaleValue(), 10);
-    if (percentScale - SCALE_STEP >= MIN_SCALE) {
+    if (percentScale - SCALE_STEP >= MIN_SIZE) {
       percentScale -= SCALE_STEP;
     }
-    editPictureScale(percentScale);
+    editPictureSize(percentScale);
   };
 
-  var editPictureScale = function (percentScale) {
+  var editPictureSize = function (percentScale) {
     scalePictureValue.setAttribute('value', percentScale + '%');
-    imagePreview.style.transform = 'scale(' + percentScale / MAX_SCALE + ')';
+    imagePreview.style.transform = 'scale(' + percentScale / MAX_SIZE + ')';
   };
 
   scalePicturePlus.addEventListener('click', onIncreasePictureScaleClick);
   scalePictureMinus.addEventListener('click', onDecreasePictureScaleClick);
-  editPictureScale(MAX_SCALE);
+  editPictureSize(MAX_SIZE);
 
   window.scale = {
-    editPictureScale: editPictureScale,
-    MAX_SCALE: MAX_SCALE
+    editPictureSize: editPictureSize,
+    MAX_SIZE: MAX_SIZE
   };
 })();

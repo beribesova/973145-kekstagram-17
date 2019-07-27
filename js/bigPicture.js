@@ -108,4 +108,7 @@
     }
   };
   pictures.addEventListener('click', onPicturesClick);
+  window.bigPicture = {
+    onPicturesClick: onPicturesClick
+  };
 })();
