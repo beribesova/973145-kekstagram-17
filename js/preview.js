@@ -11,7 +11,7 @@
     });
   };
 
-  var cleanPreviews = function () {
+  var resetBackground = function () {
     effectPreviews.forEach(function (effectPreview) {
       effectPreview.style.backgroundImage = 'none';
     });
@@ -35,6 +35,6 @@
     }
   });
   window.preview = {
-    cleanPreviews: cleanPreviews
+    resetBackground: resetBackground
   };
 })();

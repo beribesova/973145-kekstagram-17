@@ -32,7 +32,7 @@
     changeEffect('none');
     applyEffect('none', 0);
     preview.src = '';
-    window.preview.cleanPreviews();
+    window.preview.resetBackground();
     document.addEventListener('keydown', onPopupEscapePress);
     picturesElement.removeEventListener('click', window.bigPicture.onPicturesClick);
   };
@@ -47,7 +47,7 @@
     hashtags.style.border = '';
     comment.style.border = '';
     preview.src = '';
-    window.preview.cleanPreviews();
+    window.preview.resetBackground();
     picturesElement.addEventListener('click', window.bigPicture.onPicturesClick);
   };
 
