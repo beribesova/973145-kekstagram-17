@@ -21,15 +21,8 @@
   var formInput = document.querySelector('.img-upload__input');
   var picturesElement = document.querySelector('.pictures');
   var preview = document.querySelector('.img-upload__preview img');
-  var effectsPreview = document.querySelectorAll('.effects__preview');
   var onPopupEscapePress = function (evt) {
     window.util.onEscapePress(evt, closePopup);
-  };
-
-  var cleanPreviews = function () {
-    effectsPreview.forEach(function (previewItem) {
-      previewItem.style.backgroundImage = '';
-    });
   };
 
   var openPopup = function () {
@@ -39,7 +32,7 @@
     changeEffect('none');
     applyEffect('none', 0);
     preview.src = '';
-    cleanPreviews();
+    window.preview.cleanPreviews();
     document.addEventListener('keydown', onPopupEscapePress);
     picturesElement.removeEventListener('click', window.bigPicture.onPicturesClick);
   };
@@ -54,7 +47,7 @@
     hashtags.style.border = '';
     comment.style.border = '';
     preview.src = '';
-    cleanPreviews();
+    window.preview.cleanPreviews();
     picturesElement.addEventListener('click', window.bigPicture.onPicturesClick);
   };
 

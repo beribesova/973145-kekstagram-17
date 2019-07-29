@@ -3,11 +3,17 @@
   var imgUploadBlock = document.querySelector('.img-upload__start');
   var preview = document.querySelector('.img-upload__preview img');
   var inputFile = imgUploadBlock.querySelector('#upload-file');
-  var effectsPreview = document.querySelectorAll('.effects__preview');
+  var effectPreviews = document.querySelectorAll('.effects__preview');
 
-  var setPreviews = function (reader) {
-    effectsPreview.forEach(function (previewItem) {
-      previewItem.style.backgroundImage = 'url(' + reader.result + ')';
+  var setPreviews = function (source) {
+    effectPreviews.forEach(function (effectPreview) {
+      effectPreview.style.backgroundImage = 'url(' + source + ')';
+    });
+  };
+
+  var cleanPreviews = function () {
+    effectPreviews.forEach(function (effectPreview) {
+      effectPreview.style.backgroundImage = 'none';
     });
   };
 
@@ -23,9 +29,12 @@
       var reader = new FileReader();
       reader.addEventListener('load', function () {
         preview.src = reader.result;
-        setPreviews(reader);
+        setPreviews(reader.result);
       });
       reader.readAsDataURL(file);
     }
   });
+  window.preview = {
+    cleanPreviews: cleanPreviews
+  };
 })();
